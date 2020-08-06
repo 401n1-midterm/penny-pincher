@@ -5,3 +5,13 @@ An app that helps user search for the cheapest possible flights within the given
 ## Routes, wireframes, ERD
 
 ![ERD](./assets/sample_ERD.png)
+
+
+## DOM
+
+![DOM](./assets/DOM.png)
+
+
+## Software Requirements
+
+[Requirements](./Requirements.md)
