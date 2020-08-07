@@ -1,12 +1,24 @@
-from django.shortcuts import render
+import time
+
 from django.contrib import messages
+from django.shortcuts import render
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+
+from .functions import get_condor
 
 
 def home(request):
 
+    page_title = get_condor()
+
     context = {
-        'title': 'Home'
+        'title': 'Home',
+        'page_title': page_title
     }
+
     messages.error(request, 'Hello')
     return render(request, 'ticket_search/home.html', context)
 
