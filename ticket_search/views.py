@@ -2,10 +2,6 @@ import time
 
 from django.contrib import messages
 from django.shortcuts import render
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 
 from .functions import get_condor
 
