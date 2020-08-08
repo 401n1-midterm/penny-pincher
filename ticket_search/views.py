@@ -3,6 +3,7 @@ import time
 from django.contrib import messages
 from django.shortcuts import render
 
+from .forms import SearchQueryForm
 from .functions import get_condor
 
 
@@ -33,8 +34,11 @@ def about(request):
 
 def search(request):
 
+    form = SearchQueryForm()
+    
     context = {
-        'title': 'Search'
+        'title': 'Search', 
+        'form' : form
     }
 
     return render(request, 'ticket_search/search.html', context)

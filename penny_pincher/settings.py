@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # third party-apps
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +132,6 @@ STATIC_URL = '/static/'
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
+
+# crispy form template-pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
