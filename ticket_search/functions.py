@@ -9,12 +9,12 @@ from selenium.webdriver.common.keys import Keys
 def get_condor():
 
     # Run browser in headless mode
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(chrome_options=chrome_options)
+    # chrome_options = Options()
+    # chrome_options.add_argument("--headless")
+    # driver = webdriver.Chrome(chrome_options=chrome_options)
 
     # Run browser in regular mode
-    # driver = webdriver.Chrome()
+    driver = webdriver.Chrome()
 
     URL = 'https://www.condor.com/us'
     driver.get(URL)
@@ -29,7 +29,7 @@ def get_condor():
         print(err)
 
     # Click on city from
-    time.sleep(1)
+    time.sleep(5)
     city_from_el = driver.find_element_by_id('searchAirportOrigin')
     city_from_el.click()
 
