@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 
 from .forms import SearchQueryForm
 from .functions import get_condor
-
+from .models import SearchQuery
 
 def home(request):
 
@@ -35,6 +35,29 @@ def about(request):
 def search(request):
 
     if request.method == 'POST':
+        form = SearchQueryForm(request.POST)
+        for error in form.errors:
+            messages.error(request, error)
+
+        print(request.POST)
+        
+        if form.is_valid():
+            departure_city = request.POST.get('departure_city')
+            arrival_city = request.POST.get('arrival_city')
+            date_from = request.POST.get('date_from')
+            date_to = request.POST.get('date_to')
+            stay_duration = request.POST['stay_duration'] if request.POST['stay_duration'] else None
+
+            new_search = SearchQuery(
+                departure_city=departure_city, 
+                arrival_city=arrival_city, 
+                date_from=date_from, 
+                date_to=date_to,
+                stay_duration=stay_duration,
+                )
+            new_search.save()
+
+            print(new_search)
         return redirect('results')
         
     form = SearchQueryForm()
