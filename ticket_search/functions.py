@@ -1,3 +1,11 @@
+import time
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+
+
 def get_condor():
 
     # Run browser in headless mode
