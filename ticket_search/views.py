@@ -1,7 +1,7 @@
 import time
 
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from .forms import SearchQueryForm
 from .functions import get_condor
@@ -34,6 +34,9 @@ def about(request):
 
 def search(request):
 
+    if request.method == 'POST':
+        return redirect('results')
+        
     form = SearchQueryForm()
     
     context = {
@@ -42,3 +45,11 @@ def search(request):
     }
 
     return render(request, 'ticket_search/search.html', context)
+
+
+def results(request):
+    context = {
+        'title': 'Results', 
+    }
+
+    return render(request, 'ticket_search/results.html', context)
