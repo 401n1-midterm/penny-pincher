@@ -9,12 +9,12 @@ from selenium.webdriver.common.keys import Keys
 def get_condor():
 
     # Run browser in headless mode
-    # chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-    # driver = webdriver.Chrome(chrome_options=chrome_options)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(chrome_options=chrome_options)
 
     # Run browser in regular mode
-    driver = webdriver.Chrome()
+    # driver = webdriver.Chrome()
 
     URL = 'https://www.condor.com/us'
     driver.get(URL)
