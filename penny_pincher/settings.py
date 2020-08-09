@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import django_heroku
 from pathlib import Path
 
 import environ
@@ -36,7 +37,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 
 # Application definition
@@ -144,3 +145,6 @@ MESSAGE_TAGS = {
 
 # crispy form template-pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Settings for Heroku deployment
+django_heroku.settings(locals())

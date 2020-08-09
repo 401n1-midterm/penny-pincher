@@ -30,6 +30,11 @@ An app that helps user search for the cheapest possible flights within the given
 - `python manage.py collectstatic` - to collect apps static files
 - `python manage.py runserver` - to run server
 
+If you're having troubles with installing `psycopg2` try this solution (for Mac users):  
+`brew install openssl`  
+`export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/`  
+`pip3 install psycopg2`
+
 ### <a name="env"></a> ENV variables:
 
 SECRET_KEY=secret key for the app (typically 50-characters long string)  
