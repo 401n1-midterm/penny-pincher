@@ -1,3 +1,4 @@
+import os
 import time
 
 from selenium import webdriver
@@ -5,16 +6,28 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 
+from penny_pincher.settings import DEBUG
+
 
 def get_condor():
 
-    # Run browser in headless mode
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(chrome_options=chrome_options)
+    chrome_options = webdriver.ChromeOptions()
 
-    # Run browser in regular mode
-    # driver = webdriver.Chrome()
+    if not DEBUG:
+        chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument('--no-sandbox')
+        driver = webdriver.Chrome(
+            executable_path=os.environ.get('CHROMEDRIVER_PATH'),
+            chrome_options=chrome_options)
+
+    else:
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(chrome_options=chrome_options)
+        # Run browser in regular mode
+        # driver = webdriver.Chrome()
 
     URL = 'https://www.condor.com/us'
     driver.get(URL)
