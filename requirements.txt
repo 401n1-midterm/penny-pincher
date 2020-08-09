@@ -1,0 +1,23 @@
+asgiref==3.2.10
+astroid==2.4.2
+autopep8==1.5.4
+chromedriver==2.24.1
+Django==3.1
+django-crispy-forms==1.9.2
+django-environ==0.4.5
+gunicorn==20.0.4
+isort==4.3.21
+lazy-object-proxy==1.4.3
+mccabe==0.6.1
+-e git+https://github.com/401n1-midterm/penny-pincher.git@c7acaab8c1f3cca1227f6e6a0be6323fc2d483f9#egg=penny_pincher
+pycodestyle==2.6.0
+pylint==2.5.3
+pylint-django==2.3.0
+pylint-plugin-utils==0.6
+pytz==2020.1
+selenium==3.141.0
+six==1.15.0
+sqlparse==0.3.1
+toml==0.10.1
+urllib3==1.25.10
+wrapt==1.12.1
