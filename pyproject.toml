@@ -8,6 +8,8 @@ authors = ["Leo Kukharau <kuhorev.leonid@gmail.com>"]
 python = "^3.8"
 django = "^3.1"
 selenium = "^3.141.0"
+django-crispy-forms = "^1.9.2"
+django-environ = "^0.4.5"
 
 [tool.poetry.dev-dependencies]
 pylint-django = "^2.3.0"

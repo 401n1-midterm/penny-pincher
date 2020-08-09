@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+  <h1 class="content text-center">Search page</h1>
+  
+  <div class="spinner-border hidden" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+
+  <form method="post" class="content text-center">
+    {% csrf_token %}
+    <fieldset>
+      {{ form|crispy }}
+    </fieldset>
+    <button id="test" class="btn btn-dark" type="submit">
+      Search
+    </button>
+  </form>
+
+{% endblock content %}
+
+{% block script %}
+
+<script src="{% static 'js/test.js' %}"></script>
+
+{% endblock script %}
