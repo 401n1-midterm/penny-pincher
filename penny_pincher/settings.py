@@ -17,8 +17,8 @@ from django.contrib.messages import constants as messages
 
 # Setting up environmental variable
 env = environ.Env(
-# set casting, default value
-DEBUG=(bool, False)
+    # set casting, default value
+    DEBUG=(bool, False)
 )
 # reading .env file
 environ.Env.read_env()
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # third party-apps
     'crispy_forms',
 ]
@@ -133,7 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'ticket_search/static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 
