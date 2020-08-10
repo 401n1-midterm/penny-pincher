@@ -150,4 +150,5 @@ MESSAGE_TAGS = {
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Settings for Heroku deployment
-django_heroku.settings(locals())
+if 'HEROKU' in os.environ:
+    django_heroku.settings(locals())
