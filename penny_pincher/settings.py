@@ -37,6 +37,10 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143
 ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 
@@ -147,4 +151,9 @@ MESSAGE_TAGS = {
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Settings for Heroku deployment
+<<<<<<< HEAD
 django_heroku.settings(locals())
+=======
+if 'HEROKU' in os.environ:
+    django_heroku.settings(locals())
+>>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143

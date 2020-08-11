@@ -8,8 +8,49 @@
 
   <h1 class="content text-center">Search page</h1>
   
+<<<<<<< HEAD
   <div class="spinner-border hidden" role="status">
     <span class="sr-only">Loading...</span>
+=======
+
+  <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="mod4l-title" id="exampleModalLabel">Finding your cheapest flight!</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Please give us a moment while we look for the best price<br><br></h5>
+          <!-- <div class="spinner-border hidden" role="status">
+            <span class="sr-only">Loading...</span>
+          </div> -->
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div>
+            <!-- <img src="/../../ticket_search/static/img/plane_icon.png" alt="airplane"> -->
+            <img src="https://image.shutterstock.com/image-vector/airplane-icon-vector-transportation-logo-600w-1283834365.jpg" width="55px" alt="airplane">
+            <span><br>Thank you for your patience</span>
+            <h3>Fun facts about "City"</h3>
+            <ul>
+              <li>Primary Language is ...</li>
+              <li>Currency is ...</li>
+              <li>etc</li>
+            </ul>      
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+>>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143
   </div>
 
   <form method="post" class="content text-center">
@@ -17,8 +58,16 @@
     <fieldset>
       {{ form|crispy }}
     </fieldset>
+<<<<<<< HEAD
     <button id="test" class="btn btn-dark" type="submit">
       Search
+=======
+    <!-- <button id="test" class="btn btn-dark" type="submit">
+      Search
+    </button> -->
+    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#basicExampleModal">
+      Submit
+>>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143
     </button>
   </form>
 
