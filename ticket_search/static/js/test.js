@@ -1,5 +1,11 @@
-$(".spinner-border").hide()
+$("basicExampleModal").hide()
+
+// $("#test").on('click', () => {
+//   $(".spinner-border").show()
+// })
+
 
 $("#test").on('click', () => {
-  $(".spinner-border").show()
+  
+  $("basicExampleModal").show()
 })
