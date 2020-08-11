@@ -11,15 +11,12 @@ from .models import SearchQuery
 
 def home(request):
 
-    # page_title = get_condor()
-
     context = {
         'title': 'Home',
-        #'page_title': page_title
     }
 
     messages.error(request, 'Hello')
-    
+
     return render(request, 'ticket_search/home.html', context)
 
 
@@ -50,36 +47,37 @@ def search(request):
 
             try:
                 new_search = SearchQuery(
-                departure_city=departure_city, 
-                arrival_city=arrival_city, 
-                date_from=date_from, 
-                date_to=date_to,
-                stay_duration=stay_duration,
+                    departure_city=departure_city,
+                    arrival_city=arrival_city,
+                    date_from=date_from,
+                    date_to=date_to,
+                    stay_duration=stay_duration,
                 )
                 new_search.save()
                 return redirect('results')
-            
+
             except ValidationError as err:
                 messages.error(request, err)
 
     else:
         form = SearchQueryForm()
-    
+
     context = {
-        'title': 'Search', 
-        'form' : form
+        'title': 'Search',
+        'form': form
     }
-
-
 
     return render(request, 'ticket_search/search.html', context)
 
 
 def results(request):
-    time.sleep(10)
-    
+
+    page_title = get_condor()
+
     context = {
-        'title': 'Results', 
+        'title': 'Results',
+        'page_title': page_title
+
     }
 
     return render(request, 'ticket_search/results.html', context)
