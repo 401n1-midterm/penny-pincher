@@ -2,14 +2,18 @@ import os
 import time
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from penny_pincher.settings import DEBUG
 
 
-def get_condor():
+def get_condor(dep_city, arr_city):
 
     chrome_options = webdriver.ChromeOptions()
 
@@ -23,14 +27,16 @@ def get_condor():
             chrome_options=chrome_options)
 
     else:
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')
-        driver = webdriver.Chrome(chrome_options=chrome_options)
+        # chrome_options = Options()
+        # chrome_options.add_argument('--headless')
+        # driver = webdriver.Chrome(chrome_options=chrome_options)
         # Run browser in regular mode
-        # driver = webdriver.Chrome()
+        driver = webdriver.Chrome()
 
     URL = 'https://www.condor.com/us'
     driver.get(URL)
+    # wait until event happens, no longer than 15 sec
+    wait = WebDriverWait(driver, 15)
 
     # Accept necessary cookies
     try:
@@ -42,18 +48,49 @@ def get_condor():
         print(err)
 
     # Click on city from
-    time.sleep(5)
-    city_from_el = driver.find_element_by_id('searchAirportOrigin')
+    city_from_el = wait.until(
+        EC.element_to_be_clickable((By.ID, 'searchAirportOrigin')))
     city_from_el.click()
 
     # Enter departure city
-    time.sleep(1)
-    departure_city_el = driver.find_element_by_id('airportinput_id_origin')
-    departure_city_el.send_keys('Seattle', Keys.ENTER)
+    departure_city_el = wait.until(
+        EC.element_to_be_clickable((By.ID, 'airportinput_id_origin')))
+    departure_city_el.send_keys(dep_city, Keys.ENTER)
+
+    # Enter arrival city
+    arrival_city_el = wait.until(
+        EC.element_to_be_clickable((By.ID, 'airportinput_id_destination')))
+    arrival_city_el.send_keys(arr_city, Keys.ENTER)
+
+    # Select all days
+    time.sleep(1)  # wait for all page to load
+    day_els = wait.until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, 'uib-day')))
+
+    day_els = driver.find_elements_by_class_name('uib-day')
+
+    prices = []
+    for el in day_els:
+        try:
+            price = el.find_element_by_class_name('price').text
+            date = el.find_element_by_class_name('text-info').text
+            prices.append({
+                'date':     date,
+                'price':    price
+            })
+        except StaleElementReferenceException as err:
+            print(err)
+        except NoSuchElementException as err:
+            pass
+    print(prices)
 
     title = driver.title
 
+    time.sleep(100)
     driver.quit()
 
-    # Print page title (we can use it to assert that we're on the correct page)
     return title
+
+
+if __name__ == "__main__":
+    get_condor('Seattle', 'Minsk')
