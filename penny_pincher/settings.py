@@ -152,3 +152,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Settings for Heroku deployment
 if 'HEROKU' in os.environ:
     django_heroku.settings(locals())
+
+# login option settings
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
+
+
