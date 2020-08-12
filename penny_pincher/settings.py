@@ -37,10 +37,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143
 ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 
@@ -48,12 +45,14 @@ ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 INSTALLED_APPS = [
     'ticket_search.apps.TicketSearchConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 
     # third party-apps
     'crispy_forms',
@@ -151,9 +150,12 @@ MESSAGE_TAGS = {
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Settings for Heroku deployment
-<<<<<<< HEAD
-django_heroku.settings(locals())
-=======
+
 if 'HEROKU' in os.environ:
     django_heroku.settings(locals())
->>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143
+
+# login option settings
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
+
+
