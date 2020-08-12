@@ -45,12 +45,14 @@ ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 INSTALLED_APPS = [
     'ticket_search.apps.TicketSearchConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 
     # third party-apps
     'crispy_forms',
