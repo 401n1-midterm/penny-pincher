@@ -73,12 +73,12 @@ def search(request):
 def results(request):
     search = SeleniumCondorSearch()
 
-    page_title = search.search('Seattle', 'Minsk')
+    departure_prices, arrival_prices = search.search('Seattle', 'Minsk')
 
     context = {
         'title': 'Results',
-        'page_title': page_title
-
+        'departure_prices': departure_prices,
+        'arrival_prices': arrival_prices,
     }
 
     return render(request, 'ticket_search/results.html', context)
