@@ -81,3 +81,5 @@ def results(request):
     }
 
     return render(request, 'ticket_search/results.html', context)
+
+

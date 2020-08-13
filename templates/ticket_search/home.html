@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block link %}
 
-
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock link %}
 {% block content %}
 
-  <h1 class="content">Hello World</h1>
+  <!-- <h1 class="content">Hello World</h1> -->
+
+  <div class="body">
+    <section id="call-to-action" class="call-to-action">
+      <div class="centered-container w-container">
+        <h2 class="heading">Welcome</h2>
+        <p class="paragraph"><span class="text-span-3">Welcome to penny- pinchers press lets get started and it will allow you to log in. </span></p>
+      </div><a href="#" class="button-3 w-button">Lets get started</a>
+      <div class="text-block"><span class="text-span-4">About Us</span></div>
+    </section>
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5f30c5d7385a5b7286eb77ae" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="js/webflow.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script>
+    
+  </div>
   
 {% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/webflow.js' %}"></script>
+{% endblock script %}
+
+
+
+
+
+
+
