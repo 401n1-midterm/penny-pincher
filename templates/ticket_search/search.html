@@ -3,6 +3,13 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block link %}
+
+  <!-- Datepicker -->
+  <link rel="stylesheet" href="{% static 'css/gijgo.min.css' %}">
+
+{% endblock link %}
+
 
 {% block content %}
 
@@ -59,6 +66,8 @@
 
 {% block script %}
 
-<script src="{% static 'js/search_wait.js' %}"></script>
+  <!-- Datepicker -->
+  <script type="text/javascript" src="{% static 'js/gijgo.min.js' %}"></script>
+  <script src="{% static 'js/search_wait.js' %}"></script>
 
 {% endblock script %}
