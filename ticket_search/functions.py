@@ -65,7 +65,7 @@ class SeleniumCondorSearch:
             accept_cookies_el = self.driver.find_element_by_css_selector(
                 'div.cookie__body > ul > li:nth-child(2) > div > a')
             accept_cookies_el.click()
-            time.sleep(2)
+            time.sleep(1.5)
         except NoSuchElementException as err:
             print(err)
 
@@ -130,7 +130,7 @@ class SeleniumCondorSearch:
 
         while True:
             # Wait for all page to load to avoid stale element error
-            time.sleep(1)
+            time.sleep(0.5)
 
             try:
                 # If it's the last page
