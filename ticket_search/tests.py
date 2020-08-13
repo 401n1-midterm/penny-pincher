@@ -1,8 +1,5 @@
 from django.test import TestCase
-<<<<<<< HEAD
 
-# Create your tests here.
-=======
 from django.urls import reverse
 
 from .models import Result, SearchQuery
@@ -67,4 +64,3 @@ class TestModels(TestCase):
         record = Result.objects.get(pk=1)
 
         self.assertEqual(record, self.result)
->>>>>>> 7a58ee133e32b38cfb5651cc6e5be8f70a416143

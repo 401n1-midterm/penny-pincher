@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 
 from .forms import SearchQueryForm
-from .functions import get_condor
+from .functions import SeleniumCondorSearch
 from .models import SearchQuery
 
 
@@ -71,13 +71,14 @@ def search(request):
 
 
 def results(request):
+    search = SeleniumCondorSearch()
 
-    page_title = get_condor()
+    departure_prices, arrival_prices = search.search('Seattle', 'Minsk')
 
     context = {
         'title': 'Results',
-        'page_title': page_title
-
+        'departure_prices': departure_prices,
+        'arrival_prices': arrival_prices,
     }
 
     return render(request, 'ticket_search/results.html', context)
