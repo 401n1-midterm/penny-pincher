@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from django.urls import reverse
 
 from .models import Result, SearchQuery
@@ -13,7 +14,11 @@ class TestRoutes(TestCase):
             (reverse('home'), 'ticket_search/home.html'),
             (reverse('about'), 'ticket_search/about.html'),
             (reverse('search'), 'ticket_search/search.html'),
-            (reverse('results'), 'ticket_search/results.html')
+            #(reverse('results'), 'ticket_search/results.html'),
+            (reverse('register'), 'users/register.html'),
+            (reverse('login'), 'users/login.html'),
+            (reverse('logout'), 'users/logout.html'),
+            #(reverse('profile'), 'users/profile.html')
         )
 
         # Check if each route returns status 200 and uses correct template
