@@ -3,10 +3,13 @@ import time
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
+from django_q.tasks import async_task
 
 from .forms import SearchQueryForm
-from .functions import SeleniumCondorSearch
 from .models import SearchQuery
+
+
+TEMP_DATA = (None, None)
 
 
 def home(request):
@@ -54,7 +57,7 @@ def search(request):
                     stay_duration=stay_duration,
                 )
                 new_search.save()
-                return redirect('results')
+                return redirect('wait')
 
             except ValidationError as err:
                 messages.error(request, err)
@@ -70,10 +73,34 @@ def search(request):
     return render(request, 'ticket_search/search.html', context)
 
 
-def results(request):
-    search = SeleniumCondorSearch()
+def test(task):
+    global TEMP_DATA
+    TEMP_DATA = task.result
+    print(TEMP_DATA)
 
-    departure_prices, arrival_prices = search.search('Seattle', 'Minsk')
+
+def wait(request):
+    """
+    async_task('function to run (absolute path)',
+               function arguments,
+               hook - the function that is run after the job is finished')
+    """
+    async_task('ticket_search.functions.run_search',
+               'Seattle', 'Minsk',
+               hook='ticket_search.views.test')
+
+    context = {
+        'title': 'Wait',
+    }
+
+    return render(request, 'ticket_search/wait.html', context)
+
+
+def results(request):
+    global TEMP_DATA
+    print(TEMP_DATA)
+
+    departure_prices, arrival_prices = TEMP_DATA
 
     context = {
         'title': 'Results',

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Wait...</h1>
+  <h3>You will be redirected to results page in <span id="count">65</span> seconds</h3>
+{% endblock content %}
+
+
+{% block script %}
+  <script>
+    setTimeout(function() {
+     window.location = "{% url 'results' %}"
+    }, 65000);
+
+    
+    
+    window.onload = function(){
+
+    (function(){
+      var counter = 65;
+
+      setInterval(function() {
+        counter--;
+        if (counter >= 0) {
+          span = document.getElementById("count");
+          span.innerHTML = counter;
+        }
+        if (counter === 0) {
+            clearInterval(counter);
+        }
+
+      }, 1000);
+
+    })();
+
+}
+
+  </script>
+{% endblock script %}

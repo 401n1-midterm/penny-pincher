@@ -20,7 +20,7 @@ class SeleniumCondorSearch:
     def __init__(self):
         self.driver = None
         self.wait = None
-        self.headless = False
+        self.headless = True
         self.url = 'https://www.condor.com/us'
 
     def setup(self) -> object:
@@ -62,10 +62,11 @@ class SeleniumCondorSearch:
         """Click on 'Accept Cookies' button if it appears
         """
         try:
+            time.sleep(2)
             accept_cookies_el = self.driver.find_element_by_css_selector(
                 'div.cookie__body > ul > li:nth-child(2) > div > a')
             accept_cookies_el.click()
-            time.sleep(1.5)
+            time.sleep(1)
         except NoSuchElementException as err:
             print(err)
 
@@ -80,16 +81,19 @@ class SeleniumCondorSearch:
         city_from_el = self.wait.until(
             EC.element_to_be_clickable((By.ID, 'searchAirportOrigin')))
         city_from_el.click()
+        time.sleep(1)
 
         # Enter departure city
         departure_city_el = self.wait.until(
             EC.element_to_be_clickable((By.ID, 'airportinput_id_origin')))
         departure_city_el.send_keys(departure_city, Keys.ENTER)
+        time.sleep(1)
 
         # Enter arrival city
         arrival_city_el = self.wait.until(
             EC.element_to_be_clickable((By.ID, 'airportinput_id_destination')))
         arrival_city_el.send_keys(arrival_city, Keys.ENTER)
+        time.sleep(1)
 
     def convert_month(self, month_name: str) -> int:
         """Convert full month name into its number
@@ -113,7 +117,7 @@ class SeleniumCondorSearch:
             arrival (bool, optional): If True is passed in, will try to open the calendar. Defaults to False.
 
         Returns:
-            list: List of objects in format {date, price}
+            list: List of objects in format {date: date, price: price}
         """
         prices = []
 
@@ -122,15 +126,17 @@ class SeleniumCondorSearch:
             city_from_el = self.wait.until(
                 EC.element_to_be_clickable((By.ID, 'searchAirportDestination')))
             city_from_el.click()
+            time.sleep(1)
 
             # Open the calendar
             arrival_city_el = self.wait.until(
                 EC.element_to_be_clickable((By.ID, 'airportinput_id_destination')))
             arrival_city_el.send_keys(Keys.ENTER)
+            time.sleep(1)
 
         while True:
             # Wait for all page to load to avoid stale element error
-            time.sleep(0.5)
+            time.sleep(1.5)
 
             try:
                 # If it's the last page
@@ -138,6 +144,7 @@ class SeleniumCondorSearch:
                     'cst-search-flight-message__overlay')
 
                 # Close calendar
+                time.sleep(1)
                 self.driver.find_elements_by_class_name(
                     'modal-link')[2].click()
                 break
@@ -185,19 +192,18 @@ class SeleniumCondorSearch:
         Returns:
             tuple: Tuple of lists with prices ([deparure], [arrival])
         """
+
         self.driver = self.setup()
         self.wait = self.connect()
         self.accept_cookies()
         self.open_prices(departure_city, arrival_city)
         departure_prices = self.get_prices()
         arrival_prices = self.get_prices(arrival=True)
-
         self.driver.quit()
+
         return (departure_prices, arrival_prices)
 
 
-if __name__ == "__main__":
+def run_search(departure_city: str, arrival_city: str) -> tuple:
     search = SeleniumCondorSearch()
-    prices = search.search('Seattle', 'Minsk')
-    print('dep', prices[0])
-    print('arr', prices[1])
+    return search.search(departure_city, arrival_city)
