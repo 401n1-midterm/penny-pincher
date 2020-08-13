@@ -159,6 +159,14 @@ if 'HEROKU' in os.environ:
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.RedisCache",
+        "LOCATION": os.environ.get('REDIS_URL'),
+    }
+}
+
+
 # Django-Q configuration
 Q_CLUSTER = {
     'name': 'penny_pincher',
