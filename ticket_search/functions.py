@@ -20,7 +20,7 @@ class SeleniumCondorSearch:
     def __init__(self):
         self.driver = None
         self.wait = None
-        self.headless = True
+        self.headless = False
         self.url = 'https://www.condor.com/us'
 
     def setup(self) -> object:
@@ -129,7 +129,7 @@ class SeleniumCondorSearch:
 
         while True:
             # Wait for all page to load to avoid stale element error
-            time.sleep(1)
+            time.sleep(1.5)
 
             try:
                 # If it's the last page
