@@ -209,6 +209,8 @@ class SeleniumCondorSearch:
 def run_search(search_id: str) -> tuple:
     search_query = SearchQuery.objects.get(pk=search_id)
 
+    print('searh_query inside run_search', search_query)
+
     departure_city = search_query.departure_city
     arrival_city = search_query.arrival_city
 

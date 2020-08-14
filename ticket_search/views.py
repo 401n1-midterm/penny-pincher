@@ -80,6 +80,8 @@ def process_data(task):
     function_return = task.result
     search_query = SearchQuery.objects.get(pk=function_return['search_id'])
 
+    print('process data', function_return)
+
     # Data process goes in here
 
     departure_city = search_query.departure_city
