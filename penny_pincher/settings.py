@@ -162,12 +162,12 @@ LOGIN_URL = 'login'
 
 Q_CLUSTER = {
     'name': 'penny_pincher',
-    'workers': 8,
+    'workers': 1,
     'recycle': 500,
-    'timeout': 90,
+    'timeout': 200,
     'compress': True,
     'save_limit': 250,
-    'queue_limit': 500,
+    'queue_limit': 20,
     'cpu_affinity': 1,
     'label': 'Django Q',
     'redis': env('REDIS_URL')
