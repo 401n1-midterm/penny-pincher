@@ -2,6 +2,7 @@ import time
 from decimal import Decimal
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -33,6 +34,7 @@ def about(request):
     return render(request, 'ticket_search/about.html', context)
 
 
+@login_required
 def search(request):
 
     if request.method == 'POST':
@@ -41,6 +43,7 @@ def search(request):
             messages.error(request, 'Form submission failed, please try again')
 
         if form.is_valid():
+            user = request.user
             departure_city = request.POST.get('departure_city')
             arrival_city = request.POST.get('arrival_city')
             date_from = request.POST.get('date_from')
@@ -49,6 +52,7 @@ def search(request):
 
             try:
                 new_search = SearchQuery(
+                    user=user,
                     departure_city=departure_city,
                     arrival_city=arrival_city,
                     date_from=date_from,
@@ -171,3 +175,29 @@ def check_results(request, search_id):
     print(results)
 
     return JsonResponse({'ready': ready})
+
+
+@login_required
+def history(request):
+    user = request.user
+    search_queries = user.searchquery_set.all()
+
+    history = []
+
+    for search_query in search_queries:
+        query = {'date': search_query.date_created,
+                 'results': []}
+
+        results = search_query.result_set.all()
+
+        for result in results:
+            query['results'].append(result)
+
+        history.append(query)
+
+    context = {
+        'title':    'History',
+        'history':  history
+    }
+
+    return render(request, 'ticket_search/history.html', context)
