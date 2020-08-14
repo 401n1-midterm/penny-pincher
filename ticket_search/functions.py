@@ -12,6 +12,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from penny_pincher.settings import DEBUG
 
+from .models import SearchQuery, Result
+
 
 class SeleniumCondorSearch:
     """Class for getting price on condor.com
@@ -171,7 +173,7 @@ class SeleniumCondorSearch:
 
                     if price != '':
                         prices.append({
-                            'date':     f'{year}/{month_num}/{date}',
+                            'date':     f'{year}-{month_num}-{date}',
                             'price':    price
                         })
                 except NoSuchElementException as err:
@@ -204,6 +206,17 @@ class SeleniumCondorSearch:
         return (departure_prices, arrival_prices)
 
 
-def run_search(departure_city: str, arrival_city: str) -> tuple:
+def run_search(search_id: str) -> tuple:
+    search_query = SearchQuery.objects.get(pk=search_id)
+
+    departure_city = search_query.departure_city
+    arrival_city = search_query.arrival_city
+
     search = SeleniumCondorSearch()
-    return search.search(departure_city, arrival_city)
+    prices = search.search(departure_city, arrival_city)
+
+    return {
+        'departure_prices': prices[0],
+        'arrival_prices':   prices[1],
+        'search_id':        search_id
+    }

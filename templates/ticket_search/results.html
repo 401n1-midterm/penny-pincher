@@ -4,36 +4,17 @@
 
   <h1 class="content text-center">results</h1>
 
-  {% if departure_prices %}
-    <h2>Departure</h2>
-    <table style="width:100%">
-      <tr>
-        <th>Date</th>
-        <th>Price</th>
-      </tr>
-      {% for price in departure_prices %}
-        <tr>
-          <td>{{ price.date }}</td>
-          <td>{{ price.price }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% endif %}
-
-  {% if arrival_prices %}
-    <h2>Arrival</h2>
-    <table style="width:100%">
-      <tr>
-        <th>Date</th>
-        <th>Price</th>
-      </tr>
-      {% for price in arrival_prices %}
-        <tr>
-          <td>{{ price.date }}</td>
-          <td>{{ price.price }}</td>
-        </tr>
-      {% endfor %}
-    </table>
+  {% if results %}
+    {% for result in results %}
+      <ul>
+        <li>{{ result.date_created }}</li>
+        <li>{{ result.departure_city }}</li>
+        <li>{{ result.arrival_city }}</li>
+        <li>{{ result.date_from|date:"Y/M/d" }}</li>
+        <li>{{ result.date_to|date:"Y/M/d" }}</li>
+        <li>{{ result.price }}</li>
+      </ul>
+    {% endfor %}
   {% endif %}
 
 {% endblock content %}

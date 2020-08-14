@@ -15,6 +15,7 @@ $("#id_date_from").datepicker({
   },
   uiLibrary: "bootstrap",
   format: "yyyy-mm-dd",
+  modal: true,
 });
 
 $("#id_date_to").datepicker({
@@ -29,4 +30,5 @@ $("#id_date_to").datepicker({
   },
   uiLibrary: "bootstrap",
   format: "yyyy-mm-dd",
+  modal: true,
 });

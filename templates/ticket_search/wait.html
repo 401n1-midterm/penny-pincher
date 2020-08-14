@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>Wait...</h1>
-  <h3>You will be redirected to results page in <span id="count">65</span> seconds</h3>
+  <h3>You will be redirected to results page in <span id="count">90</span> seconds</h3>
 {% endblock content %}
 
 
@@ -10,14 +10,14 @@
   <script>
     setTimeout(function() {
      window.location = "{% url 'results' %}"
-    }, 65000);
+    }, 90000);
 
     
     
     window.onload = function(){
 
     (function(){
-      var counter = 65;
+      var counter = 90;
 
       setInterval(function() {
         counter--;

@@ -1,4 +1,5 @@
 import time
+from decimal import Decimal
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -6,10 +7,7 @@ from django.shortcuts import redirect, render
 from django_q.tasks import async_task
 
 from .forms import SearchQueryForm
-from .models import SearchQuery
-
-
-TEMP_DATA = (None, None)
+from .models import Result, SearchQuery
 
 
 def home(request):
@@ -57,6 +55,10 @@ def search(request):
                     stay_duration=stay_duration,
                 )
                 new_search.save()
+
+                request.session['from_search_page'] = True
+                request.session['search_id'] = new_search.pk
+
                 return redirect('wait')
 
             except ValidationError as err:
@@ -73,39 +75,71 @@ def search(request):
     return render(request, 'ticket_search/search.html', context)
 
 
-def test(task):
-    global TEMP_DATA
-    TEMP_DATA = task.result
-    print(TEMP_DATA)
+def process_data(task):
+
+    function_return = task.result
+    search_query = SearchQuery.objects.get(pk=function_return['search_id'])
+
+    # Data process goes in here
+
+    departure_city = search_query.departure_city
+    arrival_city = search_query.arrival_city
+    date_from = function_return['departure_prices'][0]['date']
+    date_to = function_return['arrival_prices'][0]['date']
+    price = Decimal(function_return['departure_prices'][0]['price'].split(' ')[1]) + \
+        Decimal(function_return['arrival_prices'][0]['price'].split(' ')[1])
+
+    result = Result(
+        search_query=search_query,
+        departure_city=departure_city,
+        arrival_city=arrival_city,
+        date_from=date_from,
+        date_to=date_to,
+        price=price
+    )
+
+    result.save()
 
 
 def wait(request):
-    """
-    async_task('function to run (absolute path)',
-               function arguments,
-               hook - the function that is run after the job is finished')
-    """
-    async_task('ticket_search.functions.run_search',
-               'Seattle', 'Minsk',
-               hook='ticket_search.views.test')
 
-    context = {
-        'title': 'Wait',
-    }
+    # Check if the user is coming from the search page
+    from_search_page = request.session.get('from_search_page', False)
+    if from_search_page:
 
-    return render(request, 'ticket_search/wait.html', context)
+        # Remove the key so that the user can't refresh the page
+        del request.session['from_search_page']
+
+        search_id = request.session.get('search_id')
+
+        """
+        async_task('function to run (absolute path)',
+                function arguments,
+                hook - the function that is run after the job is finished')
+        """
+        async_task('ticket_search.functions.run_search',
+                   search_id,
+                   hook='ticket_search.views.process_data')
+
+        context = {
+            'title':        'Wait',
+        }
+
+        return render(request, 'ticket_search/wait.html', context)
+
+    else:
+        return redirect('search')
 
 
 def results(request):
-    global TEMP_DATA
-    print(TEMP_DATA)
 
-    departure_prices, arrival_prices = TEMP_DATA
+    search_id = request.session.get('search_id')
+    search_query = SearchQuery.objects.get(pk=search_id)
+    results = search_query.result_set.all()
 
     context = {
         'title': 'Results',
-        'departure_prices': departure_prices,
-        'arrival_prices': arrival_prices,
+        'results': results
     }
 
     return render(request, 'ticket_search/results.html', context)
