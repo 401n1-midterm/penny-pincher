@@ -1,39 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
   <h1>Wait...</h1>
-  <h3>You will be redirected to results page in <span id="count">200</span> seconds</h3>
+  <h3 id="info">The search takes some time, we will check if the results are ready in <span id="count">30</span> seconds</h3>
 {% endblock content %}
 
 
 {% block script %}
   <script>
-    setTimeout(function() {
-     window.location = "{% url 'results' %}"
-    }, 200000);
-
-    
-    
-    window.onload = function(){
-
-    (function(){
-      var counter = 200;
-
-      setInterval(function() {
-        counter--;
-        if (counter >= 0) {
-          span = document.getElementById("count");
-          span.innerHTML = counter;
-        }
-        if (counter === 0) {
-            clearInterval(counter);
-        }
-
-      }, 1000);
-
-    })();
-
-}
-
+    const check_results_url = "{% url 'check_results' search_id %}"
+    const results_url = "{% url 'results' %}"
   </script>
+
+  <script src="{% static 'js/wait.js' %}"></script>
 {% endblock script %}

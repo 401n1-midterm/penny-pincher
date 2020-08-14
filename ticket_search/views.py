@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django_q.tasks import async_task
 
@@ -129,6 +130,7 @@ def wait(request):
 
         context = {
             'title':        'Wait',
+            'search_id':    search_id
         }
 
         return render(request, 'ticket_search/wait.html', context)
@@ -149,3 +151,13 @@ def results(request):
     }
 
     return render(request, 'ticket_search/results.html', context)
+
+
+def check_results(request, search_id):
+    search_query = SearchQuery.objects.get(pk=search_id)
+    results = search_query.result_set.all()
+    ready = len(results) > 0
+
+    print(results)
+
+    return JsonResponse({'ready': ready})
