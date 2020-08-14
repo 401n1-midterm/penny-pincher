@@ -24,6 +24,7 @@ pylint-plugin-utils==0.6
 python-dateutil==2.8.1
 pytz==2020.1
 redis==3.5.3
+redis-server==5.0.7
 selenium==3.141.0
 six==1.15.0
 sqlparse==0.3.1
