@@ -38,7 +38,7 @@ def search(request):
     if request.method == 'POST':
         form = SearchQueryForm(request.POST)
         for error in form.errors:
-            messages.error(request, error)
+            messages.error(request, 'Form submission failed, please try again')
 
         if form.is_valid():
             departure_city = request.POST.get('departure_city')
@@ -118,6 +118,7 @@ def wait(request):
         del request.session['from_search_page']
 
         search_id = request.session.get('search_id')
+        request.session['from_wait_page'] = True
 
         """
         async_task('function to run (absolute path)',
@@ -141,16 +142,25 @@ def wait(request):
 
 def results(request):
 
-    search_id = request.session.get('search_id')
-    search_query = SearchQuery.objects.get(pk=search_id)
-    results = search_query.result_set.all()
+    # Check if the user is coming from the wait page
+    from_wait_page = request.session.get('from_wait_page', False)
+    if from_wait_page:
 
-    context = {
-        'title': 'Results',
-        'results': results
-    }
+        # Remove the key so that the user can't refresh the page
+        del request.session['from_wait_page']
 
-    return render(request, 'ticket_search/results.html', context)
+        search_id = request.session.get('search_id')
+        search_query = SearchQuery.objects.get(pk=search_id)
+        results = search_query.result_set.all()
+
+        context = {
+            'title': 'Results',
+            'results': results
+        }
+
+        return render(request, 'ticket_search/results.html', context)
+    else:
+        return redirect('search')
 
 
 def check_results(request, search_id):
