@@ -215,10 +215,17 @@ def run_search(search_id: str) -> tuple:
     arrival_city = search_query.arrival_city
 
     search = SeleniumCondorSearch()
-    prices = search.search(departure_city, arrival_city)
+    message = ''
+
+    try:
+        prices = search.search(departure_city, arrival_city)
+    except Exception as err:
+        message = err
+        prices = ({}, {})
 
     return {
         'departure_prices': prices[0],
         'arrival_prices':   prices[1],
-        'search_id':        search_id
+        'search_id':        search_id,
+        'message':          message
     }

@@ -84,23 +84,27 @@ def process_data(task):
 
     # Data process goes in here
 
-    departure_city = search_query.departure_city
-    arrival_city = search_query.arrival_city
-    date_from = function_return['departure_prices'][0]['date']
-    date_to = function_return['arrival_prices'][0]['date']
-    price = Decimal(function_return['departure_prices'][0]['price'].split(' ')[1]) + \
-        Decimal(function_return['arrival_prices'][0]['price'].split(' ')[1])
+    try:
+        departure_city = search_query.departure_city
+        arrival_city = search_query.arrival_city
+        date_from = function_return['departure_prices'][0].get('date', '')
+        date_to = function_return['arrival_prices'][0].get('date', '')
+        price = Decimal(function_return['departure_prices'][0].get('price', '').split(' ')[1]) + \
+            Decimal(function_return['arrival_prices']
+                    [0].get('price', '').split(' ')[1])
 
-    result = Result(
-        search_query=search_query,
-        departure_city=departure_city,
-        arrival_city=arrival_city,
-        date_from=date_from,
-        date_to=date_to,
-        price=price
-    )
+        result = Result(
+            search_query=search_query,
+            departure_city=departure_city,
+            arrival_city=arrival_city,
+            date_from=date_from,
+            date_to=date_to,
+            price=price
+        )
 
-    result.save()
+        result.save()
+    except Exception as err:
+        print(err)
 
 
 def wait(request):
