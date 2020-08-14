@@ -168,19 +168,19 @@ CACHES = {
 
 
 # Django-Q configuration
-Q_CLUSTER = {
-    'name': 'penny_pincher',
-    'workers': 8,
-    'recycle': 500,
-    'timeout': 60,
-    'compress': True,
-    'save_limit': 250,
-    'queue_limit': 500,
-    'cpu_affinity': 1,
-    'label': 'Django Q',
-    'redis': {
-        'host': env.str('REDIS_HOST', 'default host'),
-        'password': env.str('REDIS_PASSWORD', 'default password'),
-        'port': env.str('REDIS_PORT', 6300),
-        'db': 0, }
-}
+# Q_CLUSTER = {
+#     'name': 'penny_pincher',
+#     'workers': 8,
+#     'recycle': 500,
+#     'timeout': 60,
+#     'compress': True,
+#     'save_limit': 250,
+#     'queue_limit': 500,
+#     'cpu_affinity': 1,
+#     'label': 'Django Q',
+#     'redis': {
+#         'host': env.str('REDIS_HOST', 'default host'),
+#         'password': env.str('REDIS_PASSWORD', 'default password'),
+#         'port': env.str('REDIS_PORT', 6300),
+#         'db': 0, }
+# }
