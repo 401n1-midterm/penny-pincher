@@ -29,6 +29,7 @@ class SeleniumCondorSearch:
         """Setup driver
         """
         if not DEBUG:
+            print('runing in not DEBUG mode')
             # Settings for production
             chrome_options = webdriver.ChromeOptions()
             chrome_options.binary_location = os.environ.get(
