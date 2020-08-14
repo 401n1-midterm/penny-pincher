@@ -159,12 +159,12 @@ if 'HEROKU' in os.environ:
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
-CACHES = {
-    "default": {
-        "BACKEND": "redis_cache.RedisCache",
-        "LOCATION": os.environ.get('REDIS_URL'),
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "redis_cache.RedisCache",
+#         "LOCATION": os.environ.get('REDIS_URL'),
+#     }
+# }
 
 
 # Django-Q configuration
@@ -184,3 +184,15 @@ CACHES = {
 #         'port': env.str('REDIS_PORT', 6300),
 #         'db': 0, }
 # }
+Q_CLUSTER = {
+    'name': 'penny_pincher',
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': env('REDIS_URL')
+}
