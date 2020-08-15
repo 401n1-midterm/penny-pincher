@@ -2,15 +2,20 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>{{ user.username }} Profile </h1>
-<form method="POST">
-  {% csrf_token %}
-  <fieldset>
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">
-      Update
-    </button>  
-  </fieldset>
-</form>
+<div class="vh-100">
+  <h1 class="content text-center mb-4">Profile ({{ user.username }})</h1>
+
+  <div class="border border-light p-3 white-background">
+    <form method="post" class="content text-center">
+      {% csrf_token %}
+      <fieldset>
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-mdb-color">
+          Update
+        </button>  
+      </fieldset>
+    </form>
+  </div>
+</div>
 
 {% endblock content %}

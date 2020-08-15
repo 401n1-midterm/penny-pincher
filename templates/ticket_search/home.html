@@ -1,8 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
+
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock link %}
 
 
 {% block content %}
 
-  <h1 class="content">Hello World</h1>
-  
+<div class="vh-100 v-100">
+  <div class="white-background d-flex align-items-center justify-content-center border border-light p-3 m-4" >
+    <div>
+      <h1 class="content text-center mb-4">Welcome to Penny-pincher project!</h1>
+
+      <p class="welcome-text">
+       This app is looking for the absolute cheapest tickets within the specified date range and (optional) desired stay duration. You need to be logged in to use the app, so please proceed to <a href="{% url 'login' %}">Login page</a> to start. If you don't have an account yet, please <a href="{% url 'register' %}">register</a>.
+       </p>
+    </div>
+  </div>
+</div>
+
 {% endblock content %}
+
