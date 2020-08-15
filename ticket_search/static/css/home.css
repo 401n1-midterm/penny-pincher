@@ -20,3 +20,9 @@ body {
      while the background image is loading */
   background-color: #464646;
 }
+
+.welcome-text {
+  font-size: larger;
+  font-weight: bold;
+  text-align: justify;
+}
