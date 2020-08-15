@@ -51,7 +51,9 @@
   background-color: #555;
 }
 
-div{
+.column div, 
+.row div, 
+.card div {
   display: inline-block;
   text-align: center;
   align-items: center;
