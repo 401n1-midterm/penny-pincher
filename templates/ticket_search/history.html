@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  <h1>History</h1>
+
+  {% if history %}
+  sfdfgdfg
+    <ul>
+      {% for query in history %}
+      <li>
+        {{ query.date|date:"Y/M/d" }}
+        <ul>
+          {% for result in query.results %}
+            <li>{{ result.date_created }}</li>
+            <li>{{ result.departure_city }}</li>
+            <li>{{ result.arrival_city }}</li>
+            <li>{{ result.date_from|date:"Y/M/d" }}</li>
+            <li>{{ result.date_to|date:"Y/M/d" }}</li>
+            <li>{{ result.price }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock content %}

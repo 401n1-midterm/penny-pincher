@@ -15,7 +15,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.8.5]
+        python-version: [3.7]
 
     steps:
     - uses: actions/checkout@v2
@@ -34,3 +34,4 @@ jobs:
         SECRET_KEY: j6@(n&k&r9^z(30uil(4#)
         DEBUG: True
         ALLOWED_HOSTS: localhost
+        REDIS_URL: redis://h:pc37c2d74da0343710e79ae5361754271d47c9e1dea3dff5112bcc3af8333dda1@ec2-54-90-127-248.compute-1.amazonaws.com:17159 

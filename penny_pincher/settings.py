@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
     # third party-apps
     'crispy_forms',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -130,7 +131,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -159,3 +160,15 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
 
+Q_CLUSTER = {
+    'name': 'penny_pincher',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 200,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 20,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': env('REDIS_URL')
+}

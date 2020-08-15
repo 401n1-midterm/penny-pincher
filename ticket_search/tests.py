@@ -1,5 +1,5 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
-
 from django.urls import reverse
 
 from .models import Result, SearchQuery
@@ -13,7 +13,7 @@ class TestRoutes(TestCase):
         test_data = (
             (reverse('home'), 'ticket_search/home.html'),
             (reverse('about'), 'ticket_search/about.html'),
-            (reverse('search'), 'ticket_search/search.html'),
+            # (reverse('search'), 'ticket_search/search.html'),
             #(reverse('results'), 'ticket_search/results.html'),
             (reverse('register'), 'users/register.html'),
             (reverse('login'), 'users/login.html'),
@@ -36,7 +36,14 @@ class TestModels(TestCase):
     def setUp(self):
         """Create test instances of SearchQuery() and Result()
         """
+
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            email='test@company.com',
+            password="test123456")
+
         self.sq = SearchQuery(
+            user=self.user,
             departure_city='Test departure city',
             arrival_city='Test arrival city',
             date_from='2020-01-01',
