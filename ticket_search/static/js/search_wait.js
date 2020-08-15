@@ -1,23 +1,23 @@
 let dateFrom;
 let dateTo;
 
-const $searchSubmitEl = $("#search_submit");
-const $departureCityEl = $("#id_departure_city");
-const $arrivalCityEl = $("#id_arrival_city");
-const $dateFromEl = $("#id_date_from");
-const $dateToEl = $("#id_date_to");
+// const $searchSubmitEl = $("#search_submit");
+// const $departureCityEl = $("#id_departure_city");
+// const $arrivalCityEl = $("#id_arrival_city");
+// const $dateFromEl = $("#id_date_from");
+// const $dateToEl = $("#id_date_to");
 // const $modalEl = $("#modal");
 
-$searchSubmitEl.on("click", () => {
-  if (
-    $departureCityEl.val() &&
-    $arrivalCityEl.val() &&
-    $dateFromEl.val() &&
-    $dateToEl.val()
-  ) {
-    $("#modal").modal("show");
-  }
-});
+// $searchSubmitEl.on("click", () => {
+//   if (
+//     $departureCityEl.val() &&
+//     $arrivalCityEl.val() &&
+//     $dateFromEl.val() &&
+//     $dateToEl.val()
+//   ) {
+//     $("#modal").modal("show");
+//   }
+// });
 
 $("#id_date_from").datepicker({
   disableDates: function (date) {

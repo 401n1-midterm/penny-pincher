@@ -13,9 +13,9 @@
 
 {% block content %}
 
-  <h1 class="content text-center">Search page</h1>
+  <h1 class="content text-center mb-4">Search</h1>
 
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  {% comment %} <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -44,22 +44,23 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-mdb-color" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
+  </div> {% endcomment %}
+  <div class="border border-light p-3 white-background">
+    <form method="post" class="content text-center">
+      {% csrf_token %}
+      <fieldset>
+        {{ form|crispy }}
+      </fieldset>
+
+      <button id="search_submit" type="submit" class="btn btn-mdb-color">
+        Submit
+      </button>
+    </form>
   </div>
-
-  <form method="post" class="content text-center">
-    {% csrf_token %}
-    <fieldset>
-      {{ form|crispy }}
-    </fieldset>
-
-    <button id="search_submit" type="submit" class="btn btn-primary">
-      Submit
-    </button>
-  </form>
 
 {% endblock content %}
 

@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     # third party-apps
     'crispy_forms',
     'django_q',
+
+    # Generates ERD
+    # 'django_extensions',
 ]
 
 MIDDLEWARE = [
