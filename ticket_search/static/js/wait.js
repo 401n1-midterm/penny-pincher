@@ -8,12 +8,13 @@ for (let i = 1; i < numberOfIterations; i++) {
     $.get(check_results_url, (data) => {
       let ready = data["ready"];
       console.log(ready);
-      counter = delay / 1000;
 
       // If results are ready - redirect to the results page
       if (ready) {
         window.location = results_url;
       }
+
+      counter = delay / 1000;
     });
   }, delay * i);
 }
