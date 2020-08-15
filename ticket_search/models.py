@@ -11,6 +11,9 @@ class SearchQuery(models.Model):
     date_to = models.DateField()
     stay_duration = models.IntegerField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['date_created']
+
     @property
     def has_results(self):
         return len(self.result_set.all()) > 0
