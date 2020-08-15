@@ -122,7 +122,7 @@ python-versions = "*"
 version = "0.4.5"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Extensions for Django"
 name = "django-extensions"
 optional = false
@@ -442,7 +442,7 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "6001595426b52b903e70b4791c106110e8511d4b0a0188fb1eceb6bbb2f94e4b"
+content-hash = "068550a5a555ad2c2f0fca70b215eda960b10f6afe14da3ed8c2ba423684c3c8"
 python-versions = "3.7.7"
 
 [metadata.files]
