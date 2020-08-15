@@ -1,27 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block link %}
 
+
+{% block link %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock link %}
+
+
 {% block content %}
 
-  <!-- <h1 class="content">Hello World</h1> -->
+<div class="h-100 v-100">
 
-  <div class="body">
-    <section id="call-to-action" class="call-to-action">
-      <div class="centered-container">
-        <h2 class="heading">Welcome</h2>
-        <p class="paragraph"><span class="text-span-3">Welcome to penny- pinchers press lets get started and it will allow you to log in. </span></p>
+    <div class="white-background d-flex align-items-center justify-content-center border border-light p-3 m-4" >
+      <div>
+          <h1 class="content text-center mb-4">Welcome</h1>
+
+        <p>Welcome to penny- pinchers press lets get started and it will allow you to log in.</p>
       </div>
-      <button class='button'>Lets Get Started !!!</button>
-    </section>
+    </div>
+
+</div>
  
-    
-  </div>
-  
+
 {% endblock content %}
 
-{% block script %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script>
-{% endblock script %}
