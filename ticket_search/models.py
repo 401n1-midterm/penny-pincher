@@ -11,6 +11,14 @@ class SearchQuery(models.Model):
     date_to = models.DateField()
     stay_duration = models.IntegerField(null=True, blank=True)
 
+    @property
+    def has_results(self):
+        return len(self.result_set.all()) > 0
+
+    @property
+    def get_results(self):
+        return self.result_set.all()
+
     def __str__(self):
         return f'{self.date_created}-{self.departure_city}-{self.arrival_city}'
 
