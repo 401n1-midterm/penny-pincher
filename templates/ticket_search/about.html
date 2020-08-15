@@ -1,8 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block link %}
 
-
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock link %}
 {% block content %}
 
-  <h1>About</h1>
+  <!-- <h1 class="content">Hello World</h1> -->
+
+  <div class="row">
+    <div class="column">
+      <div class="card">
+        <img c.plass="pic" src="https://picsum.photos/200/300?grayscale alt="Jane" style="width:50%">
+        <div class="container">
+          <h2>Jane Doe</h2>
+          <p class="title">CEO &amp; Founder</p>
+          <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          <p>example@example.com</p>
+
+        </div>
+      </div>
+    </div>
   
+    <div class="column">
+      <div class="card">
+        <img class="pic" src="https://picsum.photos/200/300?grayscale" alt="Mike" style="width:50%">
+        <div class="container">
+          <h2>Mike Ross</h2>
+          <p class="title">Art Director</p>
+          <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          <p>example@example.com</p>
+        
+        </div>
+      </div>
+    </div>
+  
+    <div class="column">
+      <div class="card">
+        <img class="pic" src="https://picsum.photos/200/300?grayscale" alt="John" style="width:50%">
+        <div class="container">
+          <h2>John Doe</h2>
+          <p class="title">Designer</p>
+          <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          <p>example@example.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
+
+{% block script %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script>
+<script src="{% static 'js/webflow.js' %}"></script> -->
+{% endblock script %}
