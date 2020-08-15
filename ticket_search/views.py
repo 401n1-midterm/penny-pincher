@@ -18,8 +18,6 @@ def home(request):
         'title': 'Home',
     }
 
-    messages.error(request, 'Hello')
-
     return render(request, 'ticket_search/home.html', context)
 
 
@@ -29,8 +27,6 @@ def about(request):
         'title': 'About'
     }
 
-    messages.info(request, 'Hello')
-    messages.warning(request, 'Hello world')
     return render(request, 'ticket_search/about.html', context)
 
 
