@@ -57,7 +57,7 @@ ALLOWED_HOSTS=localhost,127.0.0.1 (for testing)
 
 ### DB Schema:
 
-[![ERD Diagram](./assets/sample_ERD.png)](./ERD.png)
+[![ERD Diagram](./assets/ERD.png)](./assets/ERD.png)
 
 ### Dependency Documentation:
 
