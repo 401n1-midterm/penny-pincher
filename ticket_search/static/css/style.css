@@ -10,7 +10,19 @@ main {
   padding-bottom: 200px;
 }
 
+.page-footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
 .white-background {
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 5px;
+}
+
+.full-height {
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
 }
