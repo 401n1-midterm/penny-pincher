@@ -159,7 +159,7 @@ if 'HEROKU' in os.environ:
     django_heroku.settings(locals())
 
 # login option settings
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'search'
 LOGIN_URL = 'login'
 
 

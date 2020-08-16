@@ -178,22 +178,9 @@ def history(request):
     user = request.user
     search_queries = user.searchquery_set.all()
 
-    history = []
-
-    for search_query in search_queries:
-        query = {'date': search_query.date_created,
-                 'results': []}
-
-        results = search_query.result_set.all()
-
-        for result in results:
-            query['results'].append(result)
-
-        history.append(query)
-
     context = {
         'title':    'History',
-        'history':  history
+        'search_queries':  search_queries
     }
 
     return render(request, 'ticket_search/history.html', context)
