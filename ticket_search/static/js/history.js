@@ -1,3 +1,4 @@
+// Add datatables to history table
 $(() => {
   $("#history").DataTable({
     searching: true,

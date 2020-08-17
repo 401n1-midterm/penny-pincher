@@ -8,8 +8,19 @@ from .models import SearchQuery
 
 # Create the form class.
 class SearchQueryForm(forms.ModelForm):
-    date_from = forms.DateField(initial=datetime.date.today)
-    date_to = forms.DateField(initial=datetime.date.today)
+
+    # Disable autocomplete for date fields
+    def __init__(self, *args, **kwargs):
+        super(SearchQueryForm, self).__init__(*args, **kwargs)
+        self.fields['date_from'].widget.attrs.update({
+            'autocomplete': 'off'
+        })
+        self.fields['date_to'].widget.attrs.update({
+            'autocomplete': 'off'
+        })
+
+    date_from = forms.DateField()
+    date_to = forms.DateField()
 
     class Meta:
         model = SearchQuery
