@@ -1,4 +1,5 @@
 import time
+from datetime import datetime 
 from decimal import Decimal
 
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.shortcuts import redirect, render
 
 
 from .forms import SearchQueryForm
+from .functions import get_cheapest_flights
 from .models import Result, SearchQuery
 
 from background_task import background
@@ -89,32 +91,26 @@ def process_data(search_query_id):
         search_query.error = error_message
         search_query.save()
 
-    print('process data', function_return)
-
     # Data process goes in here
 
     try:
-        for i in range(3):
-            for j in range(3):
-                departure_city = search_query.departure_city
-                arrival_city = search_query.arrival_city
-                date_from = function_return['departure_prices'][i].get(
-                    'date', '')
-                date_to = function_return['arrival_prices'][j].get('date', '')
-                price = Decimal(function_return['departure_prices'][i].get('price', '').split(' ')[1]) + \
-                    Decimal(function_return['arrival_prices']
-                            [j].get('price', '').split(' ')[1])
+        cheapest_flights = get_cheapest_flights(function_return, search_query)
+        
+        for flight in cheapest_flights:
+            print('holay', flight)
+            print(flight['departure_city'])
+            
+            result = Result(
+                search_query=search_query,
+                departure_city=flight['departure_city'],
+                arrival_city=flight['arrival_city'],
+                date_from=flight['date_from'],
+                date_to=flight['date_to'],
+                price=flight['price']
+            )
+            print('hola mundo', result)
+            result.save()
 
-                result = Result(
-                    search_query=search_query,
-                    departure_city=departure_city,
-                    arrival_city=arrival_city,
-                    date_from=date_from,
-                    date_to=date_to,
-                    price=price
-                )
-
-                result.save()
     except Exception as err:
         print(err)
 
