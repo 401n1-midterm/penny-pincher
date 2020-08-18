@@ -1,4 +1,5 @@
 import time
+from datetime import datetime 
 from decimal import Decimal
 
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.shortcuts import redirect, render
 from django_q.tasks import async_task
 
 from .forms import SearchQueryForm
+from .functions import get_cheapest_flights
 from .models import Result, SearchQuery
 
 
@@ -81,29 +83,26 @@ def process_data(task):
     function_return = task.result
     search_query = SearchQuery.objects.get(pk=function_return['search_id'])
 
-    print('process data', function_return)
-
     # Data process goes in here
 
     try:
-        departure_city = search_query.departure_city
-        arrival_city = search_query.arrival_city
-        date_from = function_return['departure_prices'][0].get('date', '')
-        date_to = function_return['arrival_prices'][0].get('date', '')
-        price = Decimal(function_return['departure_prices'][0].get('price', '').split(' ')[1]) + \
-            Decimal(function_return['arrival_prices']
-                    [0].get('price', '').split(' ')[1])
+        cheapest_flights = get_cheapest_flights(function_return, search_query)
+        
+        for flight in cheapest_flights:
+            print('holay', flight)
+            print(flight['departure_city'])
+            
+            result = Result(
+                search_query=search_query,
+                departure_city=flight['departure_city'],
+                arrival_city=flight['arrival_city'],
+                date_from=flight['date_from'],
+                date_to=flight['date_to'],
+                price=flight['price']
+            )
+            print('hola mundo', result)
+            result.save()
 
-        result = Result(
-            search_query=search_query,
-            departure_city=departure_city,
-            arrival_city=arrival_city,
-            date_from=date_from,
-            date_to=date_to,
-            price=price
-        )
-
-        result.save()
     except Exception as err:
         print(err)
 
@@ -167,8 +166,6 @@ def check_results(request, search_id):
     search_query = SearchQuery.objects.get(pk=search_id)
     results = search_query.result_set.all()
     ready = len(results) > 0
-
-    print(results)
 
     return JsonResponse({'ready': ready})
 
