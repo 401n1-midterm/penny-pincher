@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # third party-apps
     'crispy_forms',
     'django_q',
+    'background_task',
 
     # Generates ERD
     # 'django_extensions',

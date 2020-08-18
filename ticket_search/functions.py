@@ -203,7 +203,7 @@ class SeleniumCondorSearch:
             departure_prices = self.get_prices()
             arrival_prices = self.get_prices(arrival=True)
         except:
-            pass
+            departure_prices = arrival_prices = []
         finally:
             self.driver.quit()
 

@@ -107,6 +107,29 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 category = "main"
+description = "Database backed asynchronous task queue"
+name = "django-background-tasks"
+optional = false
+python-versions = "*"
+version = "1.2.5"
+
+[package.dependencies]
+django-compat = ">=1.0.13"
+six = "*"
+
+[[package]]
+category = "main"
+description = "For- and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9, 1.10, and 1.11"
+name = "django-compat"
+optional = false
+python-versions = "*"
+version = "1.0.15"
+
+[package.dependencies]
+six = ">=1.10.0"
+
+[[package]]
+category = "main"
 description = "Best way to have Django DRY forms"
 name = "django-crispy-forms"
 optional = false
@@ -407,7 +430,7 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "f6e1456c0de27f26b3600e18895f314ede884aa4f7d4af6cc56e852831bbdcec"
+content-hash = "226ef8b34c88c1716dc3a98b15d0aa0a17fdbe68879b4b9b6c4af8b2113305e8"
 python-versions = "3.7.7"
 
 [metadata.files]
@@ -445,6 +468,12 @@ dj-database-url = [
 django = [
     {file = "Django-3.1-py3-none-any.whl", hash = "sha256:1a63f5bb6ff4d7c42f62a519edc2adbb37f9b78068a5a862beff858b68e3dc8b"},
     {file = "Django-3.1.tar.gz", hash = "sha256:2d390268a13c655c97e0e2ede9d117007996db692c1bb93eabebd4fb7ea7012b"},
+]
+django-background-tasks = [
+    {file = "django-background-tasks-1.2.5.tar.gz", hash = "sha256:e1b19e8d495a276c9d64c5a1ff8b41132f75d2f58e45be71b78650dad59af9de"},
+]
+django-compat = [
+    {file = "django-compat-1.0.15.tar.gz", hash = "sha256:3ac9a3bedc56b9365d9eb241bc5157d0c193769bf995f9a78dc1bc24e7c2331b"},
 ]
 django-crispy-forms = [
     {file = "django-crispy-forms-1.9.2.tar.gz", hash = "sha256:f2f1e0fbb458851636447cfb6be1a611b40c8ac9e41a74ba923011378670b43b"},

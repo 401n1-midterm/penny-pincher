@@ -5,6 +5,8 @@ autopep8==1.5.4
 blessed==1.17.9
 dj-database-url==0.5.0
 Django==3.1
+django-background-tasks==1.2.5
+django-compat==1.0.15
 django-crispy-forms==1.9.2
 django-environ==0.4.5
 django-heroku==0.3.1
