@@ -184,3 +184,26 @@ def history(request):
     }
 
     return render(request, 'ticket_search/history.html', context)
+
+
+@login_required
+def delete_result(request, result_id):
+    try:
+        result = Result.objects.get(pk=result_id)
+        result.delete()
+        messages.success(request, 'Result succesfully deleted')
+    except Exception as err:
+        messages.error(request, 'Can\'t delete the result!', err)
+
+    return redirect('history')
+
+
+@login_required
+def delete_search(request, search_id):
+    try:
+        search_query = SearchQuery.objects.get(pk=search_id)
+        search_query.delete()
+        messages.success(request, 'Search sucefully deleted')
+    except Exception as err:
+        messages.error(request, 'Can\'t delete the search!', err)
+    return redirect('history')
