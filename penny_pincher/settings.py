@@ -165,9 +165,10 @@ LOGIN_URL = 'login'
 
 Q_CLUSTER = {
     'name': 'penny_pincher',
-    'workers': 4,
-    'recycle': 500,
+    'workers': 1,
+    'recycle': 10,
     'timeout': 200,
+    'retry': 300,
     'compress': True,
     'save_limit': 250,
     'queue_limit': 20,
