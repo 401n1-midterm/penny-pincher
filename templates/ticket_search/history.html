@@ -6,75 +6,99 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/b-colvis-1.6.3/b-html5-1.6.3/cr-1.5.2/sc-2.0.2/sp-1.1.1/datatables.min.css"/>
 {% endblock link %}
 
- 
-
-
 
 {% block content %}
-  <div class="full-height">
+  <h1 class="content text-center mb-4">History</h1>
 
-    <h1 class="content text-center mb-4">History</h1>
-
-
-    {% if search_queries %}
-      <table id="history" class="table table-hover white-background">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Date Placed</th>
-            <th scope="col">City From</th>
-            <th scope="col">City To</th>
-            <th scope="col">Earliest Day</th>
-            <th scope="col">Latest Day</th>
-            <th scope="col">Stay Duration</th>
-            <th scope="col">Departure Date</th>
-            <th scope="col">Return Date</th>
-            <th scope="col">Roundtrip Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for query in search_queries %}
-            {% if query.has_results %}
-              {% for result in query.get_results %}
-                <tr>
-                  <th scope="row">{{ query.pk }}</th>
-                  <td>{{ query.date_created|date:"Y/m/d" }}</td>
-                  <td>{{ query.departure_city }}</td>
-                  <td>{{ query.arrival_city }}</td>
-                  <td>{{ query.date_from|date:"Y/m/d" }}</td>
-                  <td>{{ query.date_to|date:"Y/m/d" }}</td>
-                  <td>{{ query.stay_duration }}</td>
-                  <td>{{ result.date_from }}</td>
-                  <td>{{ result.date_to }}</td>
-                  <td>${{ result.price }}</td>
-                </tr>
-              {% endfor %}
-            {% else %}
+  {% if search_queries %}
+    <table id="history" class="table table-hover white-background">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Date Placed</th>
+          <th scope="col">City From</th>
+          <th scope="col">City To</th>
+          <th scope="col">Earliest Day</th>
+          <th scope="col">Latest Day</th>
+          <th scope="col">Stay Duration</th>
+          <th scope="col">Departure Date</th>
+          <th scope="col">Return Date</th>
+          <th scope="col">Roundtrip Price</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        {% for query in search_queries %}
+          {% if query.has_results %}
+            {% for result in query.get_results %}
               <tr>
-                <th scope="row">{{ query.pk }}</th>
-                <td>{{ query.date_created|date:"Y/m/d" }}</td>
-                <td>{{ query.departure_city }}</td>
-                <td>{{ query.arrival_city }}</td>
-                <td>{{ query.date_from|date:"Y/m/d" }}</td>
-                <td>{{ query.date_to|date:"Y/m/d" }}</td>
-                <td>{{ query.stay_duration }}</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
+                <th class="align-middle" scope="row">{{ query.pk }}</th>
+                <td class="align-middle">{{ query.date_created|date:"Y/m/d" }}</td>
+                <td class="align-middle">{{ query.departure_city }}</td>
+                <td class="align-middle">{{ query.arrival_city }}</td>
+                <td class="align-middle">{{ query.date_from|date:"Y/m/d" }}</td>
+                <td class="align-middle">{{ query.date_to|date:"Y/m/d" }}</td>
+                <td class="align-middle">{{ query.stay_duration }}</td>
+                <td class="align-middle">{{ result.date_from|date:"Y/m/d" }}</td>
+                <td class="align-middle">{{ result.date_to|date:"Y/m/d" }}</td>
+                <td class="align-middle">${{ result.price }}</td>
+                <td><a class="btn btn-outline-danger waves-effect px-3" data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_result' result.pk %}"><i class="fas fa-trash-alt"></i></a></td>
               </tr>
-            {% endif %}
-          {% endfor %}
-        </tbody>
-      </table>
-    {% endif %}
+            {% endfor %}
+          {% else %}
+            <tr>
+              <th class="align-middle" scope="row">{{ query.pk }}</th>
+              <td class="align-middle">{{ query.date_created|date:"Y/m/d" }}</td>
+              <td class="align-middle">{{ query.departure_city }}</td>
+              <td class="align-middle">{{ query.arrival_city }}</td>
+              <td class="align-middle">{{ query.date_from|date:"Y/m/d" }}</td>
+              <td class="align-middle">{{ query.date_to|date:"Y/m/d" }}</td>
+              <td class="align-middle">{{ query.stay_duration }}</td>
+              <td class="align-middle">N/A</td>
+              <td class="align-middle">N/A</td>
+              <td class="align-middle">N/A</td>
+              <td><a class="btn btn-outline-danger waves-effect px-3" data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_search' query.pk %}"><i class="fas fa-trash-alt"></i></a></td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <h3 class="content">Nothing found, please go to the <a href="{% url 'search' %}">search</a> page to submit a search request</h3>
+  {% endif %}
 
+
+
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Are you sure?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fas fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a id="link" href="" class="btn btn-outline-danger">Yes</a>
+        <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+      </div>
+    </div>
+    <!--/.Content-->
   </div>
-
+</div>
+<!--Modal: modalConfirmDelete-->
 {% endblock content%}
 
 
 {% block script %}
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/b-colvis-1.6.3/b-html5-1.6.3/cr-1.5.2/sc-2.0.2/sp-1.1.1/datatables.min.js"></script>
   <script type="text/javascript" src="{% static 'js/history.js' %}"></script>
-
 {% endblock script %}
