@@ -64,11 +64,11 @@ class SeleniumCondorSearch:
         """Click on 'Accept Cookies' button if it appears
         """
         try:
-            time.sleep(2)
+            time.sleep(1)
             accept_cookies_el = self.driver.find_element_by_css_selector(
                 'div.cookie__body > ul > li:nth-child(2) > div > a')
             accept_cookies_el.click()
-            time.sleep(1)
+            time.sleep(2)
         except NoSuchElementException as err:
             print(err)
 
@@ -222,10 +222,77 @@ def run_search(search_id: str) -> tuple:
     except Exception as err:
         message = err
         prices = ({}, {})
+   
+    departure_prices = []
+    for price in prices[0]:
+        departure_prices.append(price)
+
+    print(departure_prices)
 
     return {
-        'departure_prices': prices[0],
+        'departure_prices': departure_prices,
         'arrival_prices':   prices[1],
         'search_id':        search_id,
         'message':          message
     }
+
+
+def get_cheapest_flights(data, search_query):
+    departure_city = search_query.departure_city
+    arrival_city = search_query.arrival_city
+    date_from = search_query.date_from
+    date_to = search_query.date_to
+    duration =  search_query.stay_duration
+
+
+    departures_prices = []
+    arrival_prices = []
+    cheapest_departures = []
+    cheapest_arrivals = []
+
+    cheapest_departure = 5000.00
+    cheapest_arrival = 5000.00
+
+    for ticket_info in data['departure_prices']:
+        if ticket_info['date'] >= date_from and ticket_info['date'] <= date_to:
+            if ticket_info['date'] == date_from:
+                exact_date_from_price = Decimal(ticket_info['price'].split(' ')[1])
+                print('exact_date_from_price', exact_date_from_price)
+            departures_prices.append(ticket_info)
+
+    for ticket_info in data['arrival_prices']:
+        if ticket_info['date'] >= date_from and ticket_info['date'] <= date_to:
+            if ticket_info['date'] == date_from:
+                exact_date_return_price = Decimal(ticket_info['price'].split(' ')[1])
+                print('exact_date_return_price', exact_date_return_price)
+            arrival_prices.append(ticket_info)
+
+    for price in departures_prices:
+        if Decimal(price['price'].split(' ')[1]) <= cheapest_departure:
+            cheapest_departure = Decimal(price['price'].split(' ')[1])
+            cheapest_date = price['date']
+            cheapest_departures.append(price)
+    
+
+    for price in arrival_prices:
+        if Decimal(price['price'].split(' ')[1]) <= cheapest_arrival:
+            cheapest_arrival = Decimal(price['price'].split(' ')[1])
+            cheapest_date = price['date']
+            cheapest_arrivals.append(price)
+
+    results = []
+    
+    for departure in cheapest_departures:
+        for arrival in cheapest_arrivals:
+            if departure['date'] < arrival['date']:
+                result = {
+                    departure_city = search_query.departure_city
+                    arrival_city = search_query.arrival_city
+                    date_from = departure['date']
+                    date_to = arrival['date']
+                    price = departure['price'] + arrival['price']
+                }
+
+        result.append(result)
+    
+    return results
