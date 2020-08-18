@@ -24,4 +24,4 @@ class SearchQueryForm(forms.ModelForm):
 
     class Meta:
         model = SearchQuery
-        exclude = ['user', 'date_created']
+        exclude = ['user', 'date_created', 'error']

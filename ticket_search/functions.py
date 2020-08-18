@@ -22,7 +22,7 @@ class SeleniumCondorSearch:
     def __init__(self):
         self.driver = None
         self.wait = None
-        self.headless = True
+        self.headless = False
         self.url = 'https://www.condor.com/us'
 
     def setup(self) -> object:
@@ -195,13 +195,17 @@ class SeleniumCondorSearch:
             tuple: Tuple of lists with prices ([deparure], [arrival])
         """
 
-        self.driver = self.setup()
-        self.wait = self.connect()
-        self.accept_cookies()
-        self.open_prices(departure_city, arrival_city)
-        departure_prices = self.get_prices()
-        arrival_prices = self.get_prices(arrival=True)
-        self.driver.quit()
+        try:
+            self.driver = self.setup()
+            self.wait = self.connect()
+            self.accept_cookies()
+            self.open_prices(departure_city, arrival_city)
+            departure_prices = self.get_prices()
+            arrival_prices = self.get_prices(arrival=True)
+        except:
+            pass
+        finally:
+            self.driver.quit()
 
         return (departure_prices, arrival_prices)
 

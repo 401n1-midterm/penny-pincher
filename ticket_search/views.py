@@ -81,6 +81,11 @@ def process_data(task):
     function_return = task.result
     search_query = SearchQuery.objects.get(pk=function_return['search_id'])
 
+    error_message = function_return.get('message', False)
+    if error_message:
+        search_query.error = error_message
+        search_query.save()
+
     print('process data', function_return)
 
     # Data process goes in here
@@ -131,7 +136,7 @@ def wait(request):
 
         context = {
             'title':        'Wait',
-            'search_id':    search_id
+            'search_id':    search_id,
         }
 
         return render(request, 'ticket_search/wait.html', context)
@@ -165,12 +170,10 @@ def results(request):
 
 def check_results(request, search_id):
     search_query = SearchQuery.objects.get(pk=search_id)
-    results = search_query.result_set.all()
-    ready = len(results) > 0
 
-    print(results)
-
-    return JsonResponse({'ready': ready})
+    return JsonResponse({'ready':           search_query.has_results,
+                         'has_errors':      search_query.has_errors,
+                         'error_message':   search_query.error})
 
 
 @login_required
@@ -190,7 +193,12 @@ def history(request):
 def delete_result(request, result_id):
     try:
         result = Result.objects.get(pk=result_id)
+        search_query = result.search_query
         result.delete()
+
+        if not search_query.has_results:
+            search_query.delete()
+
         messages.success(request, 'Result succesfully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the result!', err)

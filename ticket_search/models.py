@@ -10,6 +10,7 @@ class SearchQuery(models.Model):
     date_from = models.DateField()
     date_to = models.DateField()
     stay_duration = models.IntegerField(null=True, blank=True)
+    error = models.CharField(default='', max_length=512)
 
     class Meta:
         ordering = ['date_created']
@@ -17,6 +18,10 @@ class SearchQuery(models.Model):
     @property
     def has_results(self):
         return len(self.result_set.all()) > 0
+
+    @property
+    def has_errors(self):
+        return self.error != ''
 
     @property
     def get_results(self):
