@@ -131,7 +131,7 @@ def wait(request):
 
         context = {
             'title':        'Wait',
-            'search_id':    search_id
+            'search_id':    search_id,
         }
 
         return render(request, 'ticket_search/wait.html', context)
@@ -190,7 +190,12 @@ def history(request):
 def delete_result(request, result_id):
     try:
         result = Result.objects.get(pk=result_id)
+        search_query = result.search_query
         result.delete()
+
+        if not search_query.has_results:
+            search_query.delete()
+
         messages.success(request, 'Result succesfully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the result!', err)
