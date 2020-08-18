@@ -56,7 +56,6 @@ INSTALLED_APPS = [
 
     # third party-apps
     'crispy_forms',
-    'django_q',
     'background_task',
 
     # Generates ERD
@@ -162,18 +161,3 @@ if 'HEROKU' in os.environ:
 # login option settings
 LOGIN_REDIRECT_URL = 'search'
 LOGIN_URL = 'login'
-
-
-Q_CLUSTER = {
-    'name': 'penny_pincher',
-    'workers': 1,
-    'recycle': 10,
-    'timeout': 200,
-    'retry': 300,
-    'compress': True,
-    'save_limit': 250,
-    'queue_limit': 20,
-    'cpu_affinity': 1,
-    'label': 'Django Q',
-    'redis': env('REDIS_URL')
-}

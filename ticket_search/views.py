@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django_q.tasks import async_task
+
 
 from .forms import SearchQueryForm
 from .models import Result, SearchQuery
@@ -81,12 +81,9 @@ def search(request):
 
 
 @background(schedule=timezone.now())
-def async_test(search_query_id):
-
-    results = run_search(search_query_id)
-    function_return = results
-    search_query = SearchQuery.objects.get(pk=function_return['search_id'])
-
+def process_data(search_query_id):
+    function_return = run_search(search_query_id)
+    search_query = SearchQuery.objects.get(pk=search_query_id)
     error_message = function_return.get('message', False)
     if error_message:
         search_query.error = error_message
@@ -97,61 +94,27 @@ def async_test(search_query_id):
     # Data process goes in here
 
     try:
-        departure_city = search_query.departure_city
-        arrival_city = search_query.arrival_city
-        date_from = function_return['departure_prices'][0].get('date', '')
-        date_to = function_return['arrival_prices'][0].get('date', '')
-        price = Decimal(function_return['departure_prices'][0].get('price', '').split(' ')[1]) + \
-            Decimal(function_return['arrival_prices']
-                    [0].get('price', '').split(' ')[1])
+        for i in range(3):
+            for j in range(3):
+                departure_city = search_query.departure_city
+                arrival_city = search_query.arrival_city
+                date_from = function_return['departure_prices'][i].get(
+                    'date', '')
+                date_to = function_return['arrival_prices'][j].get('date', '')
+                price = Decimal(function_return['departure_prices'][i].get('price', '').split(' ')[1]) + \
+                    Decimal(function_return['arrival_prices']
+                            [j].get('price', '').split(' ')[1])
 
-        result = Result(
-            search_query=search_query,
-            departure_city=departure_city,
-            arrival_city=arrival_city,
-            date_from=date_from,
-            date_to=date_to,
-            price=price
-        )
+                result = Result(
+                    search_query=search_query,
+                    departure_city=departure_city,
+                    arrival_city=arrival_city,
+                    date_from=date_from,
+                    date_to=date_to,
+                    price=price
+                )
 
-        result.save()
-    except Exception as err:
-        print(err)
-
-
-def process_data(task):
-
-    function_return = task.result
-    search_query = SearchQuery.objects.get(pk=function_return['search_id'])
-
-    error_message = function_return.get('message', False)
-    if error_message:
-        search_query.error = error_message
-        search_query.save()
-
-    print('process data', function_return)
-
-    # Data process goes in here
-
-    try:
-        departure_city = search_query.departure_city
-        arrival_city = search_query.arrival_city
-        date_from = function_return['departure_prices'][0].get('date', '')
-        date_to = function_return['arrival_prices'][0].get('date', '')
-        price = Decimal(function_return['departure_prices'][0].get('price', '').split(' ')[1]) + \
-            Decimal(function_return['arrival_prices']
-                    [0].get('price', '').split(' ')[1])
-
-        result = Result(
-            search_query=search_query,
-            departure_city=departure_city,
-            arrival_city=arrival_city,
-            date_from=date_from,
-            date_to=date_to,
-            price=price
-        )
-
-        result.save()
+                result.save()
     except Exception as err:
         print(err)
 
@@ -168,16 +131,8 @@ def wait(request):
         search_id = request.session.get('search_id')
         request.session['from_wait_page'] = True
 
-        """
-        async_task('function to run (absolute path)',
-                function arguments,
-                hook - the function that is run after the job is finished')
-        """
-        # async_task('ticket_search.functions.run_search',
-        #            search_id,
-        #            hook='ticket_search.views.process_data')
-        print('calling async test')
-        async_test(search_id)
+        # Call Selenium script async
+        process_data(search_id)
 
         context = {
             'title':        'Wait',
