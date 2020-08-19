@@ -2,20 +2,17 @@ import time
 from datetime import datetime
 from decimal import Decimal
 
+from background_task import background
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-
+from django.utils import timezone
 
 from .forms import SearchQueryForm
-from .functions import get_cheapest_flights
+from .functions import get_cheapest_flights, run_search
 from .models import Result, SearchQuery
-
-from background_task import background
-from .functions import run_search
-from django.utils import timezone
 
 
 def home(request):

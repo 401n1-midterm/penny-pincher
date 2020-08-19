@@ -13,10 +13,12 @@ class SearchQueryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SearchQueryForm, self).__init__(*args, **kwargs)
         self.fields['date_from'].widget.attrs.update({
-            'autocomplete': 'off'
+            'autocomplete': 'off',
+            'onkeydown': 'return false',
         })
         self.fields['date_to'].widget.attrs.update({
-            'autocomplete': 'off'
+            'autocomplete': 'off',
+            'onkeydown': 'return false',
         })
 
     date_from = forms.DateField()

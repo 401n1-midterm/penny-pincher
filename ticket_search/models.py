@@ -42,3 +42,12 @@ class Result(models.Model):
 
     def __str__(self):
         return f'{self.date_created}-{self.departure_city}-{self.arrival_city}-${self.price}'
+
+    @property
+    def get_duration(self):
+        try:
+            duration = int(str(self.date_to - self.date_from).split(' ')[0])
+        except ValueError as err:
+            duration = 0
+
+        return duration
