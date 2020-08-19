@@ -18,11 +18,12 @@
           <th scope="col">Date Placed</th>
           <th scope="col">City From</th>
           <th scope="col">City To</th>
-          <th scope="col">Earliest Day</th>
-          <th scope="col">Latest Day</th>
-          <th scope="col">Stay Duration</th>
+          <th scope="col">First Available Day</th>
+          <th scope="col">Last Available Day</th>
+          <th scope="col">Desired Trip Duration</th>
           <th scope="col">Departure Date</th>
           <th scope="col">Return Date</th>
+          <th scope="col">Actual Trip duration</th>
           <th scope="col">Roundtrip Price</th>
           <th scope="col">Delete</th>
         </tr>
@@ -41,6 +42,7 @@
                 <td class="align-middle">{{ query.stay_duration }}</td>
                 <td class="align-middle">{{ result.date_from|date:"Y/m/d" }}</td>
                 <td class="align-middle">{{ result.date_to|date:"Y/m/d" }}</td>
+                <td class="align-middle">{{ result.get_duration }}</td>
                 <td class="align-middle">${{ result.price }}</td>
                 <td><a class="btn btn-outline-danger waves-effect px-3" data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_result' result.pk %}"><i class="fas fa-trash-alt"></i></a></td>
               </tr>
@@ -54,6 +56,7 @@
               <td class="align-middle">{{ query.date_from|date:"Y/m/d" }}</td>
               <td class="align-middle">{{ query.date_to|date:"Y/m/d" }}</td>
               <td class="align-middle">{{ query.stay_duration }}</td>
+              <td class="align-middle">N/A</td>
               <td class="align-middle">N/A</td>
               <td class="align-middle">N/A</td>
               <td class="align-middle">N/A</td>

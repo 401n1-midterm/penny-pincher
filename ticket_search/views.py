@@ -1,16 +1,17 @@
 import time
-from datetime import datetime 
+from datetime import datetime
 from decimal import Decimal
 
+from background_task import background
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django_q.tasks import async_task
+from django.utils import timezone
 
 from .forms import SearchQueryForm
-from .functions import get_cheapest_flights
+from .functions import get_cheapest_flights, run_search
 from .models import Result, SearchQuery
 
 
@@ -78,20 +79,22 @@ def search(request):
     return render(request, 'ticket_search/search.html', context)
 
 
-def process_data(task):
-
-    function_return = task.result
-    search_query = SearchQuery.objects.get(pk=function_return['search_id'])
+@background(schedule=timezone.now())
+def process_data(search_query_id):
+    function_return = run_search(search_query_id)
+    search_query = SearchQuery.objects.get(pk=search_query_id)
+    error_message = function_return.get('message', False)
+    if error_message:
+        search_query.error = error_message
+        search_query.save()
 
     # Data process goes in here
 
     try:
         cheapest_flights = get_cheapest_flights(function_return, search_query)
-        
+
         for flight in cheapest_flights:
-            print('holay', flight)
-            print(flight['departure_city'])
-            
+
             result = Result(
                 search_query=search_query,
                 departure_city=flight['departure_city'],
@@ -100,7 +103,7 @@ def process_data(task):
                 date_to=flight['date_to'],
                 price=flight['price']
             )
-            print('hola mundo', result)
+
             result.save()
 
     except Exception as err:
@@ -119,18 +122,12 @@ def wait(request):
         search_id = request.session.get('search_id')
         request.session['from_wait_page'] = True
 
-        """
-        async_task('function to run (absolute path)',
-                function arguments,
-                hook - the function that is run after the job is finished')
-        """
-        async_task('ticket_search.functions.run_search',
-                   search_id,
-                   hook='ticket_search.views.process_data')
+        # Call Selenium script async
+        process_data(search_id)
 
         context = {
             'title':        'Wait',
-            'search_id':    search_id
+            'search_id':    search_id,
         }
 
         return render(request, 'ticket_search/wait.html', context)
@@ -164,10 +161,10 @@ def results(request):
 
 def check_results(request, search_id):
     search_query = SearchQuery.objects.get(pk=search_id)
-    results = search_query.result_set.all()
-    ready = len(results) > 0
 
-    return JsonResponse({'ready': ready})
+    return JsonResponse({'ready':           search_query.has_results,
+                         'has_errors':      search_query.has_errors,
+                         'error_message':   search_query.error})
 
 
 @login_required
@@ -187,7 +184,12 @@ def history(request):
 def delete_result(request, result_id):
     try:
         result = Result.objects.get(pk=result_id)
+        search_query = result.search_query
         result.delete()
+
+        if not search_query.has_results:
+            search_query.delete()
+
         messages.success(request, 'Result succesfully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the result!', err)

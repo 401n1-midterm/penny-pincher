@@ -199,13 +199,17 @@ class SeleniumCondorSearch:
             tuple: Tuple of lists with prices ([deparure], [arrival])
         """
 
-        self.driver = self.setup()
-        self.wait = self.connect()
-        self.accept_cookies()
-        self.open_prices(departure_city, arrival_city)
-        departure_prices = self.get_prices()
-        arrival_prices = self.get_prices(arrival=True)
-        self.driver.quit()
+        try:
+            self.driver = self.setup()
+            self.wait = self.connect()
+            self.accept_cookies()
+            self.open_prices(departure_city, arrival_city)
+            departure_prices = self.get_prices()
+            arrival_prices = self.get_prices(arrival=True)
+        except:
+            departure_prices = arrival_prices = []
+        finally:
+            self.driver.quit()
 
         return (departure_prices, arrival_prices)
 
@@ -224,7 +228,7 @@ def run_search(search_id: str) -> tuple:
     except Exception as err:
         message = err
         prices = ({}, {})
-   
+
     departure_prices = []
     for price in prices[0]:
         departure_prices.append(price)
@@ -238,99 +242,89 @@ def run_search(search_id: str) -> tuple:
 
 
 def get_cheapest_flights(data, search_query):
+
+    def format_data(data):
+        for i in range(len(data['departure_prices'])):
+            formatted_date = dt.strptime(
+                data['departure_prices'][i]['date'], "%Y-%m-%d")
+            formatted_price = data['departure_prices'][i]['price'].split(' ')[
+                1]
+            data['departure_prices'][i]['date'] = formatted_date
+            data['departure_prices'][i]['price'] = Decimal(formatted_price)
+
+        for i in range(len(data['arrival_prices'])):
+            formatted_date = dt.strptime(
+                data['arrival_prices'][i]['date'], "%Y-%m-%d")
+            formatted_price = data['arrival_prices'][i]['price'].split(' ')[1]
+            data['arrival_prices'][i]['date'] = formatted_date
+            data['arrival_prices'][i]['price'] = Decimal(formatted_price)
+
+        return data
+
+    def filter_by_date(data, search_query):
+        departure_prices = []
+        arrival_prices = []
+
+        date_from = dt.strptime(str(search_query.date_from), "%Y-%m-%d")
+        date_to = dt.strptime(str(search_query.date_to), "%Y-%m-%d")
+
+        for date in data['departure_prices']:
+            if date['date'] >= date_from and date['date'] <= date_to:
+                departure_prices.append(date)
+
+        for date in data['arrival_prices']:
+            if date['date'] >= date_from and date['date'] <= date_to:
+                arrival_prices.append(date)
+
+        data['departure_prices'] = departure_prices
+        data['arrival_prices'] = arrival_prices
+
+        return data
+
+    def filter_by_duration(data, search_query):
+        results = []
+        for departure_ticket in data['departure_prices']:
+            for arrival_ticket in data['arrival_prices']:
+
+                if arrival_ticket['date'] > departure_ticket['date']:
+                    trip_duration = int(
+                        str(arrival_ticket['date'] - departure_ticket['date']).split(' ')[0])
+
+                    valid_duration = (trip_duration <= search_query.stay_duration + 3) and (
+                        trip_duration >= search_query.stay_duration - 3) if search_query.stay_duration is not None else True
+
+                    print(valid_duration)
+
+                    if (valid_duration):
+                        result = {
+                            'departure_city': search_query.departure_city,
+                            'arrival_city': search_query.arrival_city,
+                            'date_from': departure_ticket['date'],
+                            'date_to': arrival_ticket['date'],
+                            'price': departure_ticket['price'] + arrival_ticket['price']
+                        }
+
+                        results.append(result)
+
+        return results
+
+    def get_cheapest_prices(results):
+        output = []
+        min_price = results[0]['price']
+
+        for result in results:
+            if result['price'] < min_price:
+                min_price = result['price']
+
+        for result in results:
+            if result['price'] == min_price:
+                output.append(result)
+
+        return output
+
+    # Execute helper functions
     format_data(data)
-    filter_by_date(data, search_query.date_from, search_query.date_to)
-    data['departure_prices'] = get_cheapest_prices(data['departure_prices'])
-    data['arrival_prices'] = get_cheapest_prices(data['arrival_prices'])
+    filter_by_date(data, search_query)
     results = filter_by_duration(data, search_query)
-    return results
-    
-def format_data(data):
-    
-    for i in range(len(data['departure_prices'])):
-        formatted_date = dt.strptime(data['departure_prices'][i]['date'], "%Y-%m-%d")
-        formatted_price = data['departure_prices'][i]['price'].split(' ')[1]
-        data['departure_prices'][i]['date'] = formatted_date
-        data['departure_prices'][i]['price']= Decimal(formatted_price)
-
-    for i in range(len(data['arrival_prices'])):
-        formatted_date = dt.strptime(data['arrival_prices'][i]['date'], "%Y-%m-%d")
-        formatted_price = data['arrival_prices'][i]['price'].split(' ')[1]
-        data['arrival_prices'][i]['date'] = formatted_date
-        data['arrival_prices'][i]['price']= Decimal(formatted_price)
-    
-    return data
-
-def filter_by_date(data, date_from, date_to):
-    departure_prices = []
-    arrival_prices = []
-    
-    date_from = dt.strptime(str(date_from), "%Y-%m-%d")
-    date_to = dt.strptime(str(date_to), "%Y-%m-%d")
-    
-    for date in data['departure_prices']:
-        if date['date'] >= date_from and date['date'] <= date_to:
-            departure_prices.append(date)
-            
-    for date in data['arrival_prices']:
-        if date['date'] >= date_from and date['date'] <= date_to:
-            arrival_prices.append(date)
-    
-    data['departure_prices'] = departure_prices
-    data['arrival_prices'] = arrival_prices
-    
-    return data
-
-def get_cheapest_prices(price_list):
-    
-    if price_list:
-        min_price = price_list[0]['price']
-        prices = []
-        
-        for price in price_list:
-            if price['price'] < min_price:
-                min_price = price['price']
-        
-        for price in price_list:
-            if price['price'] == min_price:
-                prices.append(price)
-        
-        return prices
-    else:
-        print('No fligts available during the time you entered')
-        return
-
-def filter_by_duration(data, search_query):
-    results = []
-    
-    for departure_ticket in data['departure_prices']:
-        for arrival_ticket in data['arrival_prices']:
-            try:
-                trip_duration = int(str(arrival_ticket['date'] - departure_ticket['date']).split(' ')[0])
-            except ValueError:
-                trip_duration = 0
-            
-            if search_query.stay_duration is not None:
-                
-                if trip_duration <= search_query.stay_duration + 3 and trip_duration >= search_query.stay_duration - 3:
-                    result = {
-                        'departure_city' : search_query.departure_city,
-                        'arrival_city' : search_query.arrival_city,
-                        'date_from' : departure_ticket['date'],
-                        'date_to' : arrival_ticket['date'],
-                        'price' : departure_ticket['price'] + arrival_ticket['price']
-                    }
-
-                    results.append(result)
-            else:
-                if trip_duration > 0:
-                    result = {
-                        'departure_city' : search_query.departure_city,
-                        'arrival_city' : search_query.arrival_city,
-                        'date_from' : departure_ticket['date'],
-                        'date_to' : arrival_ticket['date'],
-                        'price' : departure_ticket['price'] + arrival_ticket['price']
-                    }
-
-                    results.append(result)
+    results = get_cheapest_prices(results)
     return results
