@@ -293,8 +293,6 @@ def get_cheapest_flights(data, search_query):
                     valid_duration = (trip_duration <= search_query.stay_duration + 3) and (
                         trip_duration >= search_query.stay_duration - 3) if search_query.stay_duration is not None else True
 
-                    print(valid_duration)
-
                     if (valid_duration):
                         result = {
                             'departure_city': search_query.departure_city,

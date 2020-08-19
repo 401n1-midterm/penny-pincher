@@ -150,8 +150,9 @@ def results(request):
         results = search_query.result_set.all()
 
         context = {
-            'title': 'Results',
-            'results': results
+            'title':            'Results',
+            'search_query':     search_query,
+            'results':          results
         }
 
         return render(request, 'ticket_search/results.html', context)

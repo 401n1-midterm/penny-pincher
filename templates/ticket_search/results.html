@@ -1,19 +1,49 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block content %}
   <h1 class="content text-center mb-4">Search results</h1>
 
+  <div class="card text-center animated bounceInLeft mb-5">
+    <div class="card-header">
+      Your request #{{ search_query.pk }} as of {{ search_query.date_created|date:"Y/m/d" }}
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">City from: {{ search_query.departure_city }}</li>
+      <li class="list-group-item">City to: {{ search_query.arrival_city }}</li>
+      <li class="list-group-item">Firs available day: {{ search_query.date_from|date:"Y/m/d" }}</li>
+      <li class="list-group-item">Last available day: {{ search_query.date_to|date:"Y/m/d" }}</li>
+      <li class="list-group-item">Desired trip duration: {{ search_query.stay_duration }}</li>
+    </ul>
+  </div>
+
   {% if results %}
-    {% for result in results %}
-      <ul>
-        <li>{{ result.date_created }}</li>
-        <li>{{ result.departure_city }}</li>
-        <li>{{ result.arrival_city }}</li>
-        <li>{{ result.date_from|date:"Y/M/d" }}</li>
-        <li>{{ result.date_to|date:"Y/M/d" }}</li>
-        <li>{{ result.price }}</li>
-      </ul>
-    {% endfor %}
+  <div class="text-center table-responsive">
+    <table id="results" class="table table-hover table-bordered white-background animated bounceInRight delay-1s">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Departure Date</th>
+          <th scope="col">Return Date</th>
+          <th scope="col">Actual Trip duration</th>
+          <th scope="col">Roundtrip Price</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        {% for result in results %}
+          <tr>
+            <th class="align-middle" scope="row">{{ result.pk }}</th>
+            <td class="align-middle">{{ result.date_from|date:"Y/m/d" }}</td>
+            <td class="align-middle">{{ result.date_to|date:"Y/m/d" }}</td>
+            <td class="align-middle">{{ result.get_duration }}</td>
+            <td class="align-middle">${{ result.price }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <h3 class="content">Nothing found, please go to the <a href="{% url 'search' %}">search</a> page to submit a search request</h3>
   {% endif %}
 {% endblock content %}
