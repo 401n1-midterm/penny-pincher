@@ -11,6 +11,7 @@
   <h1 class="content text-center mb-4">History</h1>
 
   {% if search_queries %}
+  <div class="table-responsive">
     <table id="history" class="table table-hover white-background">
       <thead>
         <tr>
@@ -66,6 +67,7 @@
         {% endfor %}
       </tbody>
     </table>
+  </div>
   {% else %}
     <h3 class="content">Nothing found, please go to the <a href="{% url 'search' %}">search</a> page to submit a search request</h3>
   {% endif %}

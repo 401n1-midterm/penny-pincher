@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 
 from .forms import SearchQueryForm
-from .functions import get_cheapest_flights, run_search
+from .functions import get_cheapest_flights, run_search, wait_page_facts
 from .models import Result, SearchQuery
 
 
@@ -124,10 +124,13 @@ def wait(request):
 
         # Call Selenium script async
         process_data(search_id)
+        
+        facts = wait_page_facts()
 
         context = {
             'title':        'Wait',
             'search_id':    search_id,
+            'facts':         facts,
         }
 
         return render(request, 'ticket_search/wait.html', context)
@@ -150,8 +153,9 @@ def results(request):
         results = search_query.result_set.all()
 
         context = {
-            'title': 'Results',
-            'results': results
+            'title':            'Results',
+            'search_query':     search_query,
+            'results':          results
         }
 
         return render(request, 'ticket_search/results.html', context)

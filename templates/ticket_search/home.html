@@ -8,13 +8,19 @@
 
 
 {% block content %}
-<div class="white-background d-flex align-items-center justify-content-center border border-light p-3 m-4" >
+<div class="white-background d-flex align-items-center justify-content-center border border-light animated bounceInDown p-3 m-4" >
   <div>
     <h1 class="content text-center mb-4">Welcome to Penny-pincher project!</h1>
 
+    {% if user.is_authenticated %}
     <p class="welcome-text">
-      This app is looking for the absolute cheapest tickets within the specified date range and (optional) desired stay duration. You need to be logged in to use the app, so please proceed to <a href="{% url 'login' %}">login page</a> to start. If you don't have an account yet, please <a href="{% url 'register' %}">register</a>.
-      </p>
+      This app helps you find the absolute cheapest tickets within the specified date range and (optional) desired stay duration. So far it's working only with <a href="https://www.condor.com/us">Condor Airlines</a>. Please proceed to the <a href="{% url 'search' %} ">search</a> page to start.
+    </p>
+    {% else %}
+    <p class="welcome-text">
+      This app helps you find the absolute cheapest tickets within the specified date range and (optional) desired stay duration. So far it's working only with <a href="https://www.condor.com/us">Condor Airlines</a>. You need to be logged in to use the app, so please proceed to <a href="{% url 'login' %}">login page</a> to start. If you don't have an account yet, please <a href="{% url 'register' %}">register</a>.
+    </p>
+    {% endif %}
   </div>
 </div>
 {% endblock content %}
