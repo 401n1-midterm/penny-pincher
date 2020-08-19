@@ -2,11 +2,61 @@
 {% load static %}
 
 
+{% block link %}
+<link rel="stylesheet" href="{% static 'css/wait.css' %}">
+{% endblock link %}
+
+
 {% block content %}
   <h1 class="content text-center mb-4">Wait</h1>
 
   <h3 id="info">The search takes some time (usually about 1-2 minutes). When the search is complete you will be redirected to the results page, please do not refresh the page. We will check if the results are ready in <span id="count">30</span> seconds</h3>
+<!-- 
+
+  {% if facts %} -->
+
+  <div class="container my-5 px-5 pt-5 pb-3 z-depth-1">
+
   
+    <!--Section: Content-->
+    <section class="text-center dark-grey-text">
+  
+      <!-- Grid row -->
+      <div class="row">
+  
+        <!-- Grid column -->
+        <div class="col-md-12 mb-4mt-3" >
+          <h2>Random fact of the day </h2>
+          <p class="lead">{{ facts }}</p>
+          
+        </div>
+        <!-- Grid column -->
+  
+      </div>
+      <!-- Grid row -->
+      
+    </section>
+    <!--Section: Content-->
+  
+  
+  </div>      
+<!-- 
+  {% endif %} -->
+
+
+
+
+
+
+
+
+
+  
+  <!-- {% for fact in facts %}
+    {{ fact.name }}<br/>
+  
+  {% endfor %} -->
+
 {% endblock content %}
 
 
@@ -17,3 +67,4 @@
   </script>
   <script src="{% static 'js/wait.js' %}"></script>
 {% endblock script %}
+
