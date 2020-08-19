@@ -1,4 +1,4 @@
-const numberOfIterations = 8;
+const numberOfIterations = 5;
 const delay = 30000;
 let counter = delay / 1000;
 
