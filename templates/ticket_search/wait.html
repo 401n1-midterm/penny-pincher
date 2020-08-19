@@ -6,7 +6,42 @@
   <h1 class="content text-center mb-4">Wait</h1>
 
   <h3 id="info">The search takes some time (usually about 1-2 minutes). When the search is complete you will be redirected to the results page, please do not refresh the page. We will check if the results are ready in <span id="count">30</span> seconds</h3>
+
+
+  {% if facts %}
+
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    {% for fact in facts %}
+    <li class="nav-item">
+      <a class="nav-link" id="pills-{{ fact.name }}" data-toggle="pill" href="#{{ fact.name }}" role="tab"
+        aria-controls="{{ fact.name }}" aria-selected="false">{{ fact.name }}</a>
+    </li>
+    {% endfor %}
+
+  </ul>
   
+  <div class="tab-content pt-2 pl-1" id="pills-tabContent">
+    {% for fact in facts %}
+    <div class="tab-pane fade" id="{{ fact.name }}" role="tabpanel" aria-labelledby="pills-contact-tab">{{ fact.fact }}</div>
+    {% endfor %}
+  </div>
+
+  {% endif %}
+
+
+
+
+
+
+
+
+
+  
+  {% for fact in facts %}
+    {{ fact.name }}<br/>
+  
+  {% endfor %}
+
 {% endblock content %}
 
 

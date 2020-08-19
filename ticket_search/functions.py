@@ -4,6 +4,9 @@ import time
 from datetime import datetime as dt
 from decimal import Decimal
 
+import lxml
+import requests
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
@@ -328,3 +331,11 @@ def get_cheapest_flights(data, search_query):
     results = filter_by_duration(data, search_query)
     results = get_cheapest_prices(results)
     return results
+
+def wait_page_facts():
+  source = requests.get ('https://en.wikipedia.org/wiki/Wikipedia:On_this_day/Today').text
+  soup = BeautifulSoup(source, 'lxml')
+  answer = soup.find('div', class_="mw-parser-output").ul
+  facts = answer.find_all('li')
+
+  return [{'name': f'Fact {i}', 'fact': fact.text} for i, fact in enumerate(facts)]
