@@ -335,7 +335,8 @@ def get_cheapest_flights(data, search_query):
 def wait_page_facts():
   source = requests.get ('https://en.wikipedia.org/wiki/Wikipedia:On_this_day/Today').text
   soup = BeautifulSoup(source, 'lxml')
-  answer = soup.find('div', class_="mw-parser-output").ul
-  facts = answer.find_all('li')
-
-  return [{'name': f'Fact {i}', 'fact': fact.text} for i, fact in enumerate(facts)]
+  facts = soup.find('div', class_="mw-parser-output").ul.li.text
+#   print(facts)
+#   facts = answer.find_all('li')
+  return facts
+#   return [{'name': f'Fact {i}', 'fact': fact.text} for i, fact in enumerate(facts)]
