@@ -3,60 +3,33 @@
 
 
 {% block link %}
-<link rel="stylesheet" href="{% static 'css/wait.css' %}">
+  <link rel="stylesheet" href="{% static 'css/wait.css' %}">
 {% endblock link %}
 
-
 {% block content %}
-  <h1 class="content text-center mb-4">Wait</h1>
-
-  <h3 id="info">The search takes some time (usually about 1-2 minutes). When the search is complete you will be redirected to the results page, please do not refresh the page. We will check if the results are ready in <span id="count">30</span> seconds</h3>
-<!-- 
-
-  {% if facts %} -->
-
-  <div class="container my-5 px-5 pt-5 pb-3 z-depth-1">
-
-  
-    <!--Section: Content-->
-    <section class="text-center dark-grey-text">
-  
-      <!-- Grid row -->
-      <div class="row">
-  
-        <!-- Grid column -->
-        <div class="col-md-12 mb-4mt-3" >
-          <h2>Random fact of the day </h2>
-          <p class="lead">{{ facts }}</p>
-          
-        </div>
-        <!-- Grid column -->
-  
+  <div class="text-center p-4">
+    <div class="card mdb-color">
+      <div class="card-body">
+        <h2 class="amber-lighter-hover mb-3">Checking results...</h2>
+        <p class="white-darker-hover lead">The search takes some time (usually about 1-2 minutes). When the search is complete you will be redirected to the results page, please do not refresh the page. <br> We will check if the results are ready in <span id="count" class="yellow-text font-weight-bold">30</span> seconds...</p>
       </div>
-      <!-- Grid row -->
-      
-    </section>
-    <!--Section: Content-->
-  
-  
-  </div>      
-<!-- 
-  {% endif %} -->
 
+      <div class="text-center">
+        <div class="spinner-border text-light m-4" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-
-
-
-
-
-
-
-  
-  <!-- {% for fact in facts %}
-    {{ fact.name }}<br/>
-  
-  {% endfor %} -->
-
+  <div class="text-center p-4">
+    <div class="card mdb-color">
+      <div class="card-body">
+        <h2 class="amber-lighter-hover mb-3">Random fact of the day</h2>
+        <p class="white-darker-hover lead">{{ facts }}</p>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
 
 
