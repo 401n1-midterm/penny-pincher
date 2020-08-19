@@ -1,5 +1,5 @@
 import time
-from datetime import datetime 
+from datetime import datetime
 from decimal import Decimal
 
 from django.contrib import messages
@@ -95,11 +95,9 @@ def process_data(search_query_id):
 
     try:
         cheapest_flights = get_cheapest_flights(function_return, search_query)
-        
+
         for flight in cheapest_flights:
-            print('holay', flight)
-            print(flight['departure_city'])
-            
+
             result = Result(
                 search_query=search_query,
                 departure_city=flight['departure_city'],
@@ -108,7 +106,7 @@ def process_data(search_query_id):
                 date_to=flight['date_to'],
                 price=flight['price']
             )
-            print('hola mundo', result)
+
             result.save()
 
     except Exception as err:
