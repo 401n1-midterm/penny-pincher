@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 
 from .forms import SearchQueryForm
-from .functions import get_cheapest_flights, run_search
+from .functions import get_cheapest_flights, run_search, wait_page_facts
 from .models import Result, SearchQuery
 
 
@@ -125,9 +125,12 @@ def wait(request):
         # Call Selenium script async
         process_data(search_id)
 
+        facts = wait_page_facts()
+
         context = {
             'title':        'Wait',
             'search_id':    search_id,
+            'facts':         facts,
         }
 
         return render(request, 'ticket_search/wait.html', context)
@@ -136,27 +139,22 @@ def wait(request):
         return redirect('search')
 
 
-def results(request):
+def results(request, search_id):
 
-    # Check if the user is coming from the wait page
-    from_wait_page = request.session.get('from_wait_page', False)
-    if from_wait_page:
+    search_query = SearchQuery.objects.get(pk=search_id)
 
-        # Remove the key so that the user can't refresh the page
-        del request.session['from_wait_page']
-
-        search_id = request.session.get('search_id')
-        search_query = SearchQuery.objects.get(pk=search_id)
+    if search_query.user == request.user:
         results = search_query.result_set.all()
 
         context = {
-            'title': 'Results',
-            'results': results
+            'title':            'Results',
+            'search_query':     search_query,
+            'results':          results
         }
 
         return render(request, 'ticket_search/results.html', context)
     else:
-        return redirect('search')
+        return redirect('history')
 
 
 def check_results(request, search_id):
@@ -185,24 +183,25 @@ def delete_result(request, result_id):
     try:
         result = Result.objects.get(pk=result_id)
         search_query = result.search_query
-        result.delete()
 
-        if not search_query.has_results:
-            search_query.delete()
+        if search_query.user == request.user:
+            result.delete()
+            messages.success(request, 'Result succesfully deleted')
 
-        messages.success(request, 'Result succesfully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the result!', err)
 
-    return redirect('history')
+    return redirect('results', search_id=search_query.pk)
 
 
 @login_required
 def delete_search(request, search_id):
     try:
         search_query = SearchQuery.objects.get(pk=search_id)
-        search_query.delete()
-        messages.success(request, 'Search sucefully deleted')
+
+        if search_query.user == request.user:
+            search_query.delete()
+            messages.success(request, 'Search sucefully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the search!', err)
     return redirect('history')

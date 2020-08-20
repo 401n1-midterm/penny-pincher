@@ -5,11 +5,14 @@ from django.db import models
 class SearchQuery(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now=True)
-    departure_city = models.CharField(max_length=128)
-    arrival_city = models.CharField(max_length=128)
-    date_from = models.DateField()
-    date_to = models.DateField()
-    stay_duration = models.IntegerField(null=True, blank=True)
+    departure_city = models.CharField(
+        max_length=128, help_text='Your current city')
+    arrival_city = models.CharField(
+        max_length=128, help_text='City of your destination')
+    date_from = models.DateField(help_text='First day of your availabilty')
+    date_to = models.DateField(help_text='Last day of your availabilty')
+    stay_duration = models.IntegerField(
+        null=True, blank=True, help_text='*You will be given results &#177; 3 days from this number')
     error = models.CharField(default='', max_length=512)
 
     class Meta:
@@ -26,6 +29,17 @@ class SearchQuery(models.Model):
     @property
     def get_results(self):
         return self.result_set.all()
+
+    @property
+    def get_result_count(self):
+        return len(self.result_set.all())
+
+    @property
+    def get_price(self):
+        if self.has_results:
+            return self.result_set.first().price
+        else:
+            return 0.00
 
     def __str__(self):
         return f'{self.date_created}-{self.departure_city}-{self.arrival_city}'
