@@ -22,48 +22,36 @@
           <th scope="col">First Available Day</th>
           <th scope="col">Last Available Day</th>
           <th scope="col">Desired Trip Duration</th>
-          <th scope="col">Departure Date</th>
-          <th scope="col">Return Date</th>
-          <th scope="col">Actual Trip duration</th>
+          <th scope="col">Number Of Options</th>
           <th scope="col">Roundtrip Price</th>
+          <th scope="col">View Detail</th>
           <th scope="col">Delete</th>
         </tr>
       </thead>
       <tbody id="table-body">
         {% for query in search_queries %}
-          {% if query.has_results %}
-            {% for result in query.get_results %}
-              <tr>
-                <th class="align-middle" scope="row">{{ query.pk }}</th>
-                <td class="align-middle">{{ query.date_created|date:"Y/m/d" }}</td>
-                <td class="align-middle">{{ query.departure_city }}</td>
-                <td class="align-middle">{{ query.arrival_city }}</td>
-                <td class="align-middle">{{ query.date_from|date:"Y/m/d" }}</td>
-                <td class="align-middle">{{ query.date_to|date:"Y/m/d" }}</td>
-                <td class="align-middle">{{ query.stay_duration }}</td>
-                <td class="align-middle">{{ result.date_from|date:"Y/m/d" }}</td>
-                <td class="align-middle">{{ result.date_to|date:"Y/m/d" }}</td>
-                <td class="align-middle">{{ result.get_duration }}</td>
-                <td class="align-middle">${{ result.price }}</td>
-                <td><a class="btn btn-outline-danger waves-effect px-3" data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_result' result.pk %}"><i class="fas fa-trash-alt"></i></a></td>
-              </tr>
-            {% endfor %}
-          {% else %}
-            <tr>
-              <th class="align-middle" scope="row">{{ query.pk }}</th>
-              <td class="align-middle">{{ query.date_created|date:"Y/m/d" }}</td>
-              <td class="align-middle">{{ query.departure_city }}</td>
-              <td class="align-middle">{{ query.arrival_city }}</td>
-              <td class="align-middle">{{ query.date_from|date:"Y/m/d" }}</td>
-              <td class="align-middle">{{ query.date_to|date:"Y/m/d" }}</td>
-              <td class="align-middle">{{ query.stay_duration }}</td>
-              <td class="align-middle">N/A</td>
-              <td class="align-middle">N/A</td>
-              <td class="align-middle">N/A</td>
-              <td class="align-middle">N/A</td>
-              <td><a class="btn btn-outline-danger waves-effect px-3" data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_search' query.pk %}"><i class="fas fa-trash-alt"></i></a></td>
+          <tr>
+            <th class="align-middle text-center" scope="row">{{ query.pk }}</th>
+            <td class="align-middle text-center">{{ query.date_created|date:"Y/m/d" }}</td>
+            <td class="align-middle text-center">{{ query.departure_city }}</td>
+            <td class="align-middle text-center">{{ query.arrival_city }}</td>
+            <td class="align-middle text-center">{{ query.date_from|date:"Y/m/d" }}</td>
+            <td class="align-middle text-center">{{ query.date_to|date:"Y/m/d" }}</td>
+            {% if query.stay_duration %}
+              <td class="align-middle text-center">{{ query.stay_duration }}</td>
+            {% else %}
+              <td class="align-middle text-center">-</td>
+            {% endif %}
+            {% if query.has_results %}
+                <td class="align-middle text-center">{{ query.get_result_count }}</td>
+                <td class="align-middle text-center">${{ query.get_price }}</td>
+            {% else %}
+              <td class="align-middle text-center">N/A</td>
+              <td class="align-middle text-center">N/A</td>
+            {% endif %}
+              <td><a class="btn btn-outline-primary waves-effect p-2" href="{% url 'results' query.pk %}"><i class="fas fa-info-circle fa-lg"></i></a></td>
+              <td><a class="btn btn-outline-danger waves-effect p-2 " data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_search' query.pk %}"><i class="fas fa-trash-alt fa-lg"></i></a></td>
             </tr>
-          {% endif %}
         {% endfor %}
       </tbody>
     </table>

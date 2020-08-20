@@ -139,28 +139,19 @@ def wait(request):
         return redirect('search')
 
 
-def results(request):
+def results(request, search_id):
 
-    # Check if the user is coming from the wait page
-    from_wait_page = request.session.get('from_wait_page', False)
-    if from_wait_page:
+    search_query = SearchQuery.objects.get(pk=search_id)
+    results = search_query.result_set.all()
 
-        # Remove the key so that the user can't refresh the page
-        del request.session['from_wait_page']
+    context = {
+        'title':            'Results',
+        'search_query':     search_query,
+        'results':          results
+    }
 
-        search_id = request.session.get('search_id')
-        search_query = SearchQuery.objects.get(pk=search_id)
-        results = search_query.result_set.all()
+    return render(request, 'ticket_search/results.html', context)
 
-        context = {
-            'title':            'Results',
-            'search_query':     search_query,
-            'results':          results
-        }
-
-        return render(request, 'ticket_search/results.html', context)
-    else:
-        return redirect('search')
 
 
 def check_results(request, search_id):

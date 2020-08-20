@@ -30,6 +30,17 @@ class SearchQuery(models.Model):
     def get_results(self):
         return self.result_set.all()
 
+    @property
+    def get_result_count(self):
+        return len(self.result_set.all())
+
+    @property
+    def get_price(self):
+        if self.has_results:
+            return self.result_set.first().price
+        else:
+            return 0.00
+
     def __str__(self):
         return f'{self.date_created}-{self.departure_city}-{self.arrival_city}'
 
