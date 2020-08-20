@@ -28,6 +28,7 @@
           <th scope="col">Return Date</th>
           <th scope="col">Actual Trip duration</th>
           <th scope="col">Roundtrip Price</th>
+          <th scope="col">Delete Result</th>
         </tr>
       </thead>
       <tbody id="table-body">
@@ -38,6 +39,7 @@
             <td class="align-middle">{{ result.date_to|date:"Y/m/d" }}</td>
             <td class="align-middle">{{ result.get_duration }}</td>
             <td class="align-middle">${{ result.price }}</td>
+            <td><a class="btn btn-outline-danger waves-effect p-2 " data-toggle="modal" data-target="#modalConfirmDelete" href="{% url 'delete_result' result.pk %}"><i class="fas fa-trash-alt fa-lg"></i></a></td>
           </tr>
         {% endfor %}
       </tbody>
@@ -46,4 +48,38 @@
   {% else %}
     <h3 class="content">Nothing found, please go to the <a href="{% url 'search' %}">search</a> page to submit a search request</h3>
   {% endif %}
+
+
+
+  <!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Are you sure?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fas fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a id="link" href="" class="btn btn-outline-danger">Yes</a>
+        <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+
 {% endblock content %}
+
+{% block script %}
+  <script type="text/javascript" src="{% static 'js/results.js' %}"></script>
+{% endblock script %}

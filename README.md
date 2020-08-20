@@ -52,7 +52,7 @@ ALLOWED_HOSTS=localhost,127.0.0.1 (for testing)
 `search/` - search page, allows a user to submit new search request(login required);  
 `delete_search/<search_id>/` - takes a search id and deletes it from DB (login required);  
 `wait` - waiting page, is shown while the search results are being processed, also shows webscraped random fact of the day to entertain the user (login required, can only be accessed from the `search` page);  
-`results` - shows search results (login required, can only be accessed from the `wait` page);  
+`results/<search_id>/` - shows search results (login required);  
 `delete_result/<result_id>/` - takes a result id and deletes it from DB (login required);  
 `history/` - shows current user search history, allows deleting results (login required);  
 `check_results/<search_id>/` - takes a search id and return whether or not the results are ready for the search request;  

@@ -124,7 +124,7 @@ def wait(request):
 
         # Call Selenium script async
         process_data(search_id)
-        
+
         facts = wait_page_facts()
 
         context = {
@@ -142,16 +142,19 @@ def wait(request):
 def results(request, search_id):
 
     search_query = SearchQuery.objects.get(pk=search_id)
-    results = search_query.result_set.all()
 
-    context = {
-        'title':            'Results',
-        'search_query':     search_query,
-        'results':          results
-    }
+    if search_query.user == request.user:
+        results = search_query.result_set.all()
 
-    return render(request, 'ticket_search/results.html', context)
+        context = {
+            'title':            'Results',
+            'search_query':     search_query,
+            'results':          results
+        }
 
+        return render(request, 'ticket_search/results.html', context)
+    else:
+        return redirect('history')
 
 
 def check_results(request, search_id):
@@ -180,24 +183,25 @@ def delete_result(request, result_id):
     try:
         result = Result.objects.get(pk=result_id)
         search_query = result.search_query
-        result.delete()
 
-        if not search_query.has_results:
-            search_query.delete()
+        if search_query.user == request.user:
+            result.delete()
+            messages.success(request, 'Result succesfully deleted')
 
-        messages.success(request, 'Result succesfully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the result!', err)
 
-    return redirect('history')
+    return redirect('results', search_id=search_query.pk)
 
 
 @login_required
 def delete_search(request, search_id):
     try:
         search_query = SearchQuery.objects.get(pk=search_id)
-        search_query.delete()
-        messages.success(request, 'Search sucefully deleted')
+
+        if search_query.user == request.user:
+            search_query.delete()
+            messages.success(request, 'Search sucefully deleted')
     except Exception as err:
         messages.error(request, 'Can\'t delete the search!', err)
     return redirect('history')
