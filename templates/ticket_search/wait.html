@@ -2,18 +2,42 @@
 {% load static %}
 
 
-{% block content %}
-  <h1 class="content text-center mb-4">Wait</h1>
+{% block link %}
+  <link rel="stylesheet" href="{% static 'css/wait.css' %}">
+{% endblock link %}
 
-  <h3 id="info">The search takes some time (usually about 1-2 minutes). When the search is complete you will be redirected to the results page, please do not refresh the page. We will check if the results are ready in <span id="count">30</span> seconds</h3>
-  
+{% block content %}
+  <div class="text-center p-4">
+    <div class="card mdb-color">
+      <div class="card-body">
+        <h2 class="amber-lighter-hover mb-3">Checking results...</h2>
+        <p class="white-darker-hover lead">The search takes some time (usually about 1-2 minutes). When the search is complete you will be redirected to the results page, please do not refresh the page. <br> We will check if the results are ready in <span id="count" class="yellow-text font-weight-bold">30</span> seconds...</p>
+      </div>
+
+      <div class="text-center">
+        <div class="spinner-border text-light m-4" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center p-4">
+    <div class="card mdb-color">
+      <div class="card-body">
+        <h2 class="amber-lighter-hover mb-3">Random fact of the day</h2>
+        <p class="white-darker-hover lead">{{ facts }}</p>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
 
 
 {% block script %}
   <script>
     const check_results_url = "{% url 'check_results' search_id %}"
-    const results_url = "{% url 'results' %}"
+    const results_url = "{% url 'results' search_id %}"
   </script>
   <script src="{% static 'js/wait.js' %}"></script>
 {% endblock script %}
+

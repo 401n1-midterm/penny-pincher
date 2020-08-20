@@ -21,9 +21,12 @@ class SearchQueryForm(forms.ModelForm):
             'onkeydown': 'return false',
         })
 
-    date_from = forms.DateField()
-    date_to = forms.DateField()
+    # date_from = forms.DateField()
+    # date_to = forms.DateField()
 
     class Meta:
         model = SearchQuery
         exclude = ['user', 'date_created', 'error']
+        labels = {
+            'stay_duration': 'Desired trip duration'
+        }
