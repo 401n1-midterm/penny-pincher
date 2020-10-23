@@ -9,3 +9,4 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='users/logout.html'),name='logout'),
     path('profile/', profile, name='profile'),
 ]
+#7cgx2JH!9fRFRfE
